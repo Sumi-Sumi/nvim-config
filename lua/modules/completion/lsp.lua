@@ -32,7 +32,7 @@ mason_registry:on("package:install:success", function(pkg)
         local interpreter = return_exe_value(("patchelf --print-interpreter %q" .. "/bin/nvim"):format(nvim)):sub(1, -2)
         for _, rel_path in pairs(receipt.links.bin) do
             local bin_abs_path = pkg:get_install_path() .. "/" .. rel_path
-            if pkg.name == "lua-language-server" then
+            if pkg.name == "lua-language-server" or pkg.name == "clangd" then
                 bin_abs_path = pkg:get_install_path() .. "/extension/server/bin/lua-language-server"
                 os.execute(
                     ("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path)
