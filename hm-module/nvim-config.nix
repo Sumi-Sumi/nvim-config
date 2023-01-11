@@ -4,11 +4,11 @@
 
 with lib;
 let
-  cfg = config.programs.nvim_my_conf;
+  cfg = config.programs.nvim-my-conf;
 in
 {
   options = {
-    programs.nvim_my_conf = {
+    programs.nvim-my-conf = {
       enable = mkEnableOption ''
         My nvim config
       '';
@@ -17,9 +17,9 @@ in
   config = mkIf cfg.enable {
     xdg = {
       configFile = {
-        "nvim/lua".source = ./lua; # windowsとconfigを共有するため.config/nvimで管理する
-        "nvim/init.lua".source = ./init.lua;
-        "latexmk".source = ./latexmk;
+        "nvim/lua".source = ../lua; # windowsとconfigを共有するため.config/nvimで管理する
+        "nvim/init.lua".source = ../init.lua;
+        "latexmk".source = ../latexmk;
       };
     };
     home.sessionVariables = {
