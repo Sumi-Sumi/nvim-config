@@ -1,20 +1,19 @@
 #  neovim conf
 #  I use conf sourcing ./nvim but you can manager from home manager.
 { config, lib, pkgs, ... }:
+
 with lib;
 let
   cfg = config.programs.nvim_my_conf;
 in
-
 {
-  options =
-    {
-      programs.nvim_my_conf = {
-        enable = mkEnableOption ''
-          neovim with my setting
-        '';
-      };
+  options = {
+    programs.nvim_my_conf = {
+      enable = mkEnableOption ''
+        My nvim config
+      '';
     };
+  };
   config = mkIf cfg.enable {
     xdg = {
       configFile = {
