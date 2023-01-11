@@ -16,10 +16,10 @@
 
       ls = path: builtins.readDir path;
       isModules = file: with lib; if (hasSuffix ".nix" file) then strings.removeSuffix ".nix" file else null;
-      modules = with builtins; lib.remove null (map isModules (attrNames (ls ./hm-modules)));
+      modules = with builtins; lib.remove null (map isModules (attrNames (ls ./hm-module)));
       genModule = name: {
         inherit name;
-        value = import ./hm-modules/${name}.nix;
+        value = import ./hm-module/${name}.nix;
       };
       mkModules = with builtins; listToAttrs (map genModule modules);
     in
