@@ -69,10 +69,8 @@ cmp["neovim/nvim-lspconfig"] = {
 cmp["williamboman/mason.nvim"] = {
     opt = false,
     requires = {
-        {
-            "williamboman/mason-lspconfig.nvim",
-        },
-        { "WhoIsSethDaniel/mason-tool-installer.nvim", config = conf.mason_install },
+        { "williamboman/mason-lspconfig.nvim", opt = false, },
+        { "WhoIsSethDaniel/mason-tool-installer.nvim", opt=false, config = conf.mason_install },
     },
 }
 

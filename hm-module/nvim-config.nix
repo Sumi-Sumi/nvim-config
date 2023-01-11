@@ -42,13 +42,14 @@ in
         ninja
         gnumake
         gcc # For nvim-treesitter
-        # zlib
         patchelf
         sqlite
         yarn
 
         ripgrep
-        silver-searcher # ToDO どっちか消す
+
+        # LSP
+        clang-tools # Not run binary pkg installed by mason
       ];
 
       extraPython3Packages = ps: with ps; [
