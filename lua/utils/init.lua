@@ -1,7 +1,7 @@
 local vim = vim
 local uv = vim.loop
 local os_name = vim.loop.os_uname().sysname
-local sep = (os_name == "Windows_NT") and "\\" or "/"
+local sep = "/"
 
 local utils = {}
 

@@ -24,54 +24,38 @@ end
 -- We're using patchelf to mathe that work
 -- Thanks to: https://github.com/williamboman/mason.nvim/issues/428#issuecomment-1357192515
 local mason_registry = require("mason-registry")
-mason_registry:on("package:install:success", function(pkg)
-    pkg:get_receipt():if_present(function(receipt)
-        if is_linux then
+if is_linux and vim.api.nvim_exec("!cat /etc/os-release | grep '^NAME'", true):find("NixOS") ~= nil then
+    mason_registry:on("package:install:success", function(pkg)
+        pkg:get_receipt():if_present(function(receipt)
             -- Figure out the interpreter inspecting nvim itself
             -- This is the same for all packages, so compute only once
             -- Set the interpreter on the binary
-            if vim.api.nvim_exec("!cat /etc/os-release | grep '^NAME'", true):find("NixOS") ~= nil then
-                local nvim = return_exe_value("nix path-info -r /run/current-system | grep neovim-unwrapped"):sub(1, -2)
-                local interpreter = return_exe_value(("patchelf --print-interpreter %q" .. "/bin/nvim"):format(nvim)):sub(1, -2)
-                for _, rel_path in pairs(receipt.links.bin) do
-                    local bin_abs_path = pkg:get_install_path() .. "/" .. rel_path
-                    if pkg.name == "lua-language-server" then
-                        bin_abs_path = pkg:get_install_path() .. "/extension/server/bin/lua-language-server"
-                        os.execute(
-                            ("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path)
-                        )
-                    elseif pkg.name == "marksman" then
-                        bin_abs_path = pkg:get_install_path() .. "/marksman"
-                        local libstdcpp = return_exe_value("nix path-info -r /run/current-system | grep gcc | grep lib | head -n1"):sub(1, -2) .. "/lib"
-                        local zlib = return_exe_value("nix path-info -r /run/current-system | grep zlib | head -n1"):sub(1, -2) .. "/lib"
-                        local icu4c = return_exe_value("nix path-info -r /run/current-system | grep icu4c | head -n1"):sub(1, -2) .. "/lib"
-                        os.execute(
-                            ("patchelf --set-interpreter %s --set-rpath %s:%s:%s %s"):format(interpreter, libstdcpp, zlib, icu4c, bin_abs_path)
-                        )
-                    end
+            local nvim = return_exe_value("nix path-info -r /run/current-system | grep neovim-unwrapped"):sub(1, -2)
+            local interpreter = return_exe_value(("patchelf --print-interpreter %q" .. "/bin/nvim"):format(nvim)):sub(1, -2)
+            for _, rel_path in pairs(receipt.links.bin) do
+                local bin_abs_path = pkg:get_install_path() .. "/" .. rel_path
+                if pkg.name == "lua-language-server" then
+                    bin_abs_path = pkg:get_install_path() .. "/extension/server/bin/lua-language-server"
+                    os.execute(
+                        ("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path)
+                    )
+                elseif pkg.name == "marksman" then
+                    bin_abs_path = pkg:get_install_path() .. "/marksman"
+                    local libstdcpp = return_exe_value("nix path-info -r /run/current-system | grep gcc | grep lib | head -n1"):sub(1, -2) .. "/lib"
+                    local zlib = return_exe_value("nix path-info -r /run/current-system | grep zlib | head -n1"):sub(1, -2) .. "/lib"
+                    local icu4c = return_exe_value("nix path-info -r /run/current-system | grep icu4c | head -n1"):sub(1, -2) .. "/lib"
+                    os.execute(
+                        ("patchelf --set-interpreter %s --set-rpath %s:%s:%s %s"):format(interpreter, libstdcpp, zlib, icu4c, bin_abs_path)
+                    )
                 end
             end
-        end
+        end)
     end)
-end)
+end
 
 mason.setup({
     ui = {
         border = "rounded",
-    },
-})
-
-
-mason_lsp.setup({
-    ensure_installed = {
-        "bashls",
-        "efm",
-        "sumneko_lua",
-        "clangd",
-        "gopls",
-        "pyright",
-        "rnix",
-        "marksman",
     },
 })
 
@@ -115,176 +99,185 @@ local function switch_source_header_splitcmd(bufnr, splitcmd)
     end
 end
 
+
+-- LSP configs
 -- Override server settings here
+local configs = {
+    bashls = {},
+    efm = {},
+    pyright = {},
+    rnix = {},
+    marksman = {},
+    gopls = {
+        on_attach = custom_attach,
+        flags = { debounce_text_changes = 500 },
+        capabilities = capabilities,
+        cmd = { "gopls", "-remote=auto" },
+        settings = {
+            gopls = {
+                usePlaceholders = true,
+                analyses = {
+                    nilness = true,
+                    shadow = true,
+                    unusedparams = true,
+                    unusewrites = true,
+                },
+            },
+        },
+    },
+    sumneko_lua = {
+        capabilities = capabilities,
+        on_attach = custom_attach,
+        settings = {
+            Lua = {
+                diagnostics = { globals = { "vim", "packer_plugins" } },
+                workspace = {
+                    library = {
+                        [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                        [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+                    },
+                    maxPreload = 100000,
+                    preloadFileSize = 10000,
+                },
+                telemetry = { enable = false },
+                -- Do not override treesitter lua highlighting with sumneko lua highlighting
+                semantic = { enable = false },
+            },
+        },
+    },
+    clangd = {
+        capabilities = vim.tbl_deep_extend("keep", { offsetEncoding = { "utf-16", "utf-8" } }, capabilities),
+        single_file_support = true,
+        on_attach = custom_attach,
+        cmd = {
+            "clangd",
+            "--background-index",
+            "--pch-storage=memory",
+            -- You MUST set this arg ↓ to your c/cpp compiler location (if not included)!
+            "--query-driver=/usr/bin/clang++,/usr/bin/**/clang-*,/bin/clang,/bin/clang++,/usr/bin/gcc,/usr/bin/g++",
+            "--clang-tidy",
+            "--all-scopes-completion",
+            "--cross-file-rename",
+            "--completion-style=detailed",
+            "--header-insertion-decorators",
+            "--header-insertion=iwyu",
+        },
+        commands = {
+            ClangdSwitchSourceHeader = {
+                function()
+                    switch_source_header_splitcmd(0, "edit")
+                end,
+                description = "Open source/header in current buffer",
+            },
+            ClangdSwitchSourceHeaderVSplit = {
+                function()
+                    switch_source_header_splitcmd(0, "vsplit")
+                end,
+                description = "Open source/header in a new vsplit",
+            },
+            ClangdSwitchSourceHeaderSplit = {
+                function()
+                    switch_source_header_splitcmd(0, "split")
+                end,
+                description = "Open source/header in a new split",
+            },
+        },
+    },
+    jsonls = {
+        flags = { debounce_text_changes = 500 },
+        capabilities = capabilities,
+        on_attach = custom_attach,
+        settings = {
+            json = {
+                -- Schemas https://www.schemastore.org
+                schemas = {
+                    {
+                        fileMatch = { "package.json" },
+                        url = "https://json.schemastore.org/package.json",
+                    },
+                    {
+                        fileMatch = { "tsconfig*.json" },
+                        url = "https://json.schemastore.org/tsconfig.json",
+                    },
+                    {
+                        fileMatch = {
+                            ".prettierrc",
+                            ".prettierrc.json",
+                            "prettier.config.json",
+                        },
+                        url = "https://json.schemastore.org/prettierrc.json",
+                    },
+                    {
+                        fileMatch = { ".eslintrc", ".eslintrc.json" },
+                        url = "https://json.schemastore.org/eslintrc.json",
+                    },
+                    {
+                        fileMatch = {
+                            ".babelrc",
+                            ".babelrc.json",
+                            "babel.config.json",
+                        },
+                        url = "https://json.schemastore.org/babelrc.json",
+                    },
+                    {
+                        fileMatch = { "lerna.json" },
+                        url = "https://json.schemastore.org/lerna.json",
+                    },
+                    {
+                        fileMatch = {
+                            ".stylelintrc",
+                            ".stylelintrc.json",
+                            "stylelint.config.json",
+                        },
+                        url = "http://json.schemastore.org/stylelintrc.json",
+                    },
+                    {
+                        fileMatch = { "/.github/workflows/*" },
+                        url = "https://json.schemastore.org/github-workflow.json",
+                    },
+                },
+            },
+        },
+    },
+    -- https://github.com/vscode-langservers/vscode-html-languageserver-bin
+    html = {
+        cmd = { "html-languageserver", "--stdio" },
+        filetypes = { "html" },
+        init_options = {
+            configurationSection = { "html", "css", "javascript" },
+            embeddedLanguages = { css = true, javascript = true },
+        },
+        settings = {},
+        single_file_support = true,
+        flags = { debounce_text_changes = 500 },
+        capabilities = capabilities,
+        on_attach = custom_attach,
+    }
+}
+
+local _lsp = {}
+local n = 0
+for k,_ in pairs(configs) do
+    n = n + 1
+    _lsp[n] = k
+end
+mason_lsp.setup({
+    ensure_installed = _lsp
+})
 
 for _, server in ipairs(mason_lsp.get_installed_servers()) do
-    if server == "gopls" then
-        nvim_lsp.gopls.setup({
-            on_attach = custom_attach,
-            flags = { debounce_text_changes = 500 },
-            capabilities = capabilities,
-            cmd = { "gopls", "-remote=auto" },
-            settings = {
-                gopls = {
-                    usePlaceholders = true,
-                    analyses = {
-                        nilness = true,
-                        shadow = true,
-                        unusedparams = true,
-                        unusewrites = true,
-                    },
-                },
-            },
-        })
-    elseif server == "sumneko_lua" then
-        nvim_lsp.sumneko_lua.setup({
-            capabilities = capabilities,
-            on_attach = custom_attach,
-            settings = {
-                Lua = {
-                    diagnostics = { globals = { "vim", "packer_plugins" } },
-                    workspace = {
-                        library = {
-                            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                            [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-                        },
-                        maxPreload = 100000,
-                        preloadFileSize = 10000,
-                    },
-                    telemetry = { enable = false },
-                    -- Do not override treesitter lua highlighting with sumneko lua highlighting
-                    semantic = { enable = false },
-                },
-            },
-        })
-    elseif server == "clangd" then
-        nvim_lsp.clangd.setup({
-            capabilities = vim.tbl_deep_extend("keep", { offsetEncoding = { "utf-16", "utf-8" } }, capabilities),
-            single_file_support = true,
-            on_attach = custom_attach,
-            cmd = {
-                "clangd",
-                "--background-index",
-                "--pch-storage=memory",
-                -- You MUST set this arg ↓ to your c/cpp compiler location (if not included)!
-                "--query-driver=/usr/bin/clang++,/usr/bin/**/clang-*,/bin/clang,/bin/clang++,/usr/bin/gcc,/usr/bin/g++",
-                "--clang-tidy",
-                "--all-scopes-completion",
-                "--cross-file-rename",
-                "--completion-style=detailed",
-                "--header-insertion-decorators",
-                "--header-insertion=iwyu",
-            },
-            commands = {
-                ClangdSwitchSourceHeader = {
-                    function()
-                        switch_source_header_splitcmd(0, "edit")
-                    end,
-                    description = "Open source/header in current buffer",
-                },
-                ClangdSwitchSourceHeaderVSplit = {
-                    function()
-                        switch_source_header_splitcmd(0, "vsplit")
-                    end,
-                    description = "Open source/header in a new vsplit",
-                },
-                ClangdSwitchSourceHeaderSplit = {
-                    function()
-                        switch_source_header_splitcmd(0, "split")
-                    end,
-                    description = "Open source/header in a new split",
-                },
-            },
-        })
-    elseif server == "jsonls" then
-        nvim_lsp.jsonls.setup({
-            flags = { debounce_text_changes = 500 },
-            capabilities = capabilities,
-            on_attach = custom_attach,
-            settings = {
-                json = {
-                    -- Schemas https://www.schemastore.org
-                    schemas = {
-                        {
-                            fileMatch = { "package.json" },
-                            url = "https://json.schemastore.org/package.json",
-                        },
-                        {
-                            fileMatch = { "tsconfig*.json" },
-                            url = "https://json.schemastore.org/tsconfig.json",
-                        },
-                        {
-                            fileMatch = {
-                                ".prettierrc",
-                                ".prettierrc.json",
-                                "prettier.config.json",
-                            },
-                            url = "https://json.schemastore.org/prettierrc.json",
-                        },
-                        {
-                            fileMatch = { ".eslintrc", ".eslintrc.json" },
-                            url = "https://json.schemastore.org/eslintrc.json",
-                        },
-                        {
-                            fileMatch = {
-                                ".babelrc",
-                                ".babelrc.json",
-                                "babel.config.json",
-                            },
-                            url = "https://json.schemastore.org/babelrc.json",
-                        },
-                        {
-                            fileMatch = { "lerna.json" },
-                            url = "https://json.schemastore.org/lerna.json",
-                        },
-                        {
-                            fileMatch = {
-                                ".stylelintrc",
-                                ".stylelintrc.json",
-                                "stylelint.config.json",
-                            },
-                            url = "http://json.schemastore.org/stylelintrc.json",
-                        },
-                        {
-                            fileMatch = { "/.github/workflows/*" },
-                            url = "https://json.schemastore.org/github-workflow.json",
-                        },
-                    },
-                },
-            },
-        })
-    elseif server == "rnix" then
-        nvim_lsp.rnix.setup({})
-    elseif server == "marksman" then
-        nvim_lsp.marksman.setup({})
-    elseif server ~= "efm" then
-        nvim_lsp[server].setup({
-            capabilities = capabilities,
-            on_attach = custom_attach,
-        })
-    end
+    nvim_lsp[server].setup(configs[server])
+    -- elseif server ~= "efm" then
+    --     nvim_lsp[server].setup({
+    --         capabilities = capabilities,
+    --         on_attach = custom_attach,
+    --     })
+    -- end
 end
-
--- https://github.com/vscode-langservers/vscode-html-languageserver-bin
-
-nvim_lsp.html.setup({
-    cmd = { "html-languageserver", "--stdio" },
-    filetypes = { "html" },
-    init_options = {
-        configurationSection = { "html", "css", "javascript" },
-        embeddedLanguages = { css = true, javascript = true },
-    },
-    settings = {},
-    single_file_support = true,
-    flags = { debounce_text_changes = 500 },
-    capabilities = capabilities,
-    on_attach = custom_attach,
-})
 
 local efmls = require("efmls-configs")
 
 -- Init `efm-langserver` here.
-
 efmls.init({
     on_attach = custom_attach,
     capabilities = capabilities,
@@ -292,7 +285,6 @@ efmls.init({
 })
 
 -- Require `efmls-configs-nvim`'s config here
-
 local vint = require("efmls-configs.linters.vint")
 local eslint = require("efmls-configs.linters.eslint")
 local flake8 = require("efmls-configs.linters.flake8")

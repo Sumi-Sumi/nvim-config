@@ -36,11 +36,7 @@ function Packer:load_plugins()
 
     -- Each plugins.lua return { "<repo>" = { conf=foo } }
     for _,m in ipairs(plugins_file) do
-        if global.is_windows then
-            local repos = require(m:sub(0, #m - 3))
-        else
-            local repos = require(m:sub(0, #m - 4))
-        end
+        local repos = require(m:sub(0, #m - 4))
         for repo, conf in pairs(repos) do
             self.repos[#self.repos + 1] = vim.tbl_extend("force", { repo }, conf)
         end
