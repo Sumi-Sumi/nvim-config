@@ -13,8 +13,8 @@ $makeindex    = 'mendex %O -o %D %S';
 $max_repeat   = 5;
 $pdf_mode     = 4; # You set 3 if you use latex
 
-$aux_dir = 'tmp/'
-$out_dir = 'tmp/'
+$aux_dir = 'tmp/';
+$out_dir = 'tmp/';
 
 $pvc_view_file_via_temporary = 0;
 
