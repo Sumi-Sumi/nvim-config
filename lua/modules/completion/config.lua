@@ -296,7 +296,9 @@ end
 
 
 function config.luasnip()
-    local snippet_path = os.getenv("HOME") .. "/.config/nvim/my-snippets/"
+    local vim_path = require("core.global").vim_path
+    local utils = require("utils")
+    local snippet_path = utils.joinpath(vim_path, "my-snippets")
     if not vim.tbl_contains(vim.opt.rtp:get(), snippet_path) then
         vim.opt.rtp:append(snippet_path)
     end
