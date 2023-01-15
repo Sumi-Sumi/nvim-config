@@ -12,7 +12,8 @@ end
 
 
 function utils.get_ext(path)
-    return path:match("^.+(%..+)$")
+    local ext = path:match("^.+(%..+)$")
+    return ext
 end
 
 
