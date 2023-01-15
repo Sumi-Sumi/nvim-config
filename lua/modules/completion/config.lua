@@ -192,7 +192,7 @@ function config.lspsaga()
         },
     }
 
-    require("lspsaga").init_lsp_saga(opts)
+    require("lspsaga").setup(opts)
 end
 
 
