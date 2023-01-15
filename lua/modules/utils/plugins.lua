@@ -62,7 +62,8 @@ utils["tyru/open-browser.vim"] = {
     },
     cmd = {
         "OpenBrowser",
-        "OpenBrowserSearch"
+        "OpenBrowserSearch",
+        "OpenBrowserSmartSearch"
     },
     config = conf.open_browser
 }
