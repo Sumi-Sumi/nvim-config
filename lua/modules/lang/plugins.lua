@@ -1,5 +1,5 @@
 local lang = {}
-local conf = require("modules.treesitter.config")
+local conf = require("modules.lang.config")
 
 
 lang["chrisbra/csv.vim"] = {
@@ -18,9 +18,9 @@ lang["akinsho/flutter-tools.nvim"] = {
 
 lang["iamcco/markdown-preview.nvim"] = {
     opt = true,
-    run = "cd app && yarn install",
-    ft = "markdown",
-    config = conf.md_preview
+    run = "cd app && npm install",
+    config = conf.md_preview,
+    ft = { "markdown" }
 }
 
 lang["simrat39/rust-tools.nvim"] = {

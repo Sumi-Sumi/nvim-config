@@ -1,5 +1,3 @@
-local vim = vim
-local g, o, fn, api = vim.g, vim.o, vim.fn, vim.api
 local config = {}
 
 
@@ -24,7 +22,8 @@ end
 
 function config.md_preview()
     local utils = require("utils")
-    g.mkdp_markdown_css = utils.joinpath(fn.stdpath("config"), "lua", "modules", "lang", "md_preview", "github-markdown.css")
+    vim.g.mkdp_markdown_css = utils.joinpath(vim.fn.stdpath("config"), "lua", "modules", "lang", "md_preview", "github-markdown.css")
+    vim.g.mkdp_filetypes = { "markdown" }
 end
 
 
@@ -216,17 +215,17 @@ end
 
 
 function config.vim_go()
-    g.go_doc_keywordprg_enabled = 0
-    g.go_def_mapping_enabled = 0
-    g.go_code_completion_enabled = 0
+    vim.g.go_doc_keywordprg_enabled = 0
+    vim.g.go_def_mapping_enabled = 0
+    vim.g.go_code_completion_enabled = 0
 end
 
 
 function config.vimtex()
     local viewer = "zathura"
-    g.vimtex_view_method = viewer
-    g.vimtex_view_general_viewer = viewer
-    g.vimtex_view_forward_search_on_start = false
+    vim.g.vimtex_view_method = viewer
+    vim.g.vimtex_view_general_viewer = viewer
+    vim.g.vimtex_view_forward_search_on_start = false
 end
 
 

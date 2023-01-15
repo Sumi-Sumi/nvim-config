@@ -241,7 +241,6 @@ local configs = {
     },
     -- https://github.com/vscode-langservers/vscode-html-languageserver-bin
     html = {
-        cmd = { "html-languageserver", "--stdio" },
         filetypes = { "html" },
         init_options = {
             configurationSection = { "html", "css", "javascript" },
