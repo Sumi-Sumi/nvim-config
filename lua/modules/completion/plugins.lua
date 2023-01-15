@@ -62,7 +62,8 @@ cmp["hrsh7th/nvim-cmp"] = {
 
 cmp["neovim/nvim-lspconfig"] = {
     opt = true,
-    event =  "BufReadPost",
+    event =  "BufReadPre",
+    cmd = "LspStart",
     config = conf.nvim_lsp,
 }
 
