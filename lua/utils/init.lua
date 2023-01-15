@@ -27,11 +27,7 @@ function utils.joinpath(...)
         end
     end
 
-    if utils.get_ext(path) ~= nil or utils.get_ext(path) == path then
-        return path
-    else
-        return path .. sep
-    end
+    return path
 end
 
 
