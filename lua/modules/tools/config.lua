@@ -139,6 +139,7 @@ function config.neo_tree()
         },
         nesting_rules = {},
         filesystem = {
+            hijack_netrw_behavior = "open_default",
             filtered_items = {
                 hide_dotfiles = false,
                 hide_gitignored = true,

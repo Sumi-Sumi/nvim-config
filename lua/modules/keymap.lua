@@ -63,8 +63,8 @@ local plug_keymap = {
     ["n|<leader>C"] = map_cu("HopChar1BC"),
     ["n|<leader>CC"] = map_cu("HopChar2BC"),
     -- open-browser
-    ["n|<leader>bo"] = map_cr("OpenBrowserSmartSearch"),
-    ["n|<leader>bs"] = map_cmd("OpenBrowserSearch"),
+    ["n|<leader>bo"] = map_cmd("<Plug>(openbrowser-smart-search)"),
+    ["v|<leader>bo"] = map_cmd("<Plug>(openbrowser-smart-search)"),
     -- todo-comments.nvim
     ["n|]t"] = map_cr("lua require('todo-comments').jump_next()"),
     ["n|[t"] = map_cr("lua require('todo-comments').jump_prev()"),

@@ -56,16 +56,16 @@ utils["terrortylor/nvim-comment"] = {
 }
 
 utils["tyru/open-browser.vim"] = {
-    opt = true,
+    --opt = true,
     requires = {
         { "Shougo/vimproc.vim", opt = true, run = "make" }
     },
-    cmd = {
-        "OpenBrowser",
-        "OpenBrowserSearch",
-        "OpenBrowserSmartSearch"
-    },
-    config = conf.open_browser
+    --cmd = {
+    --    "OpenBrowser",
+    --    "OpenBrowserSearch",
+    --    "OpenBrowserSmartSearch"
+    --},
+    setup = conf.open_browser
 }
 
 utils["folke/todo-comments.nvim"] = {

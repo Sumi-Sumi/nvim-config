@@ -38,6 +38,7 @@ tools["nvim-neo-tree/neo-tree.nvim"] = {
         "NeoTreeShowInSplit",
         "NeoTreeShowInSplitToggle",
     },
+    event = "BufReadPost",
     config = conf.neo_tree
 }
 
