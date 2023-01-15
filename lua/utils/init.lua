@@ -12,8 +12,7 @@ end
 
 
 function utils.get_ext(path)
-    local ext = path:match("^.+(%..+)$")
-    return ext
+    return path:match("^.+(%..+)$")
 end
 
 
@@ -28,10 +27,10 @@ function utils.joinpath(...)
         end
     end
 
-    if utils.get_ext(path) == nil then
-        return path .. sep
-    else
+    if utils.get_ext(path) ~= nil or utils.get_ext(path) == path then
         return path
+    else
+        return path .. sep
     end
 end
 
