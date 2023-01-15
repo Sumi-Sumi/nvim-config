@@ -302,11 +302,16 @@ local clangfmt = require("modules.completion.efm.formatters.clangfmt")
 -- Override default config here
 
 flake8 = vim.tbl_extend("force", flake8, {
-    prefix = "flake8: max-line-length=160, ignore F403 and F405",
+    prefix = "flake8: max-line-length=120, ignore F403 and F405",
     lintStdin = true,
     lintIgnoreExitCode = true,
     lintFormats = { "%f:%l:%c: %t%n%n%n %m" },
-    lintCommand = "flake8 --max-line-length 160 --extend-ignore F403,F405 --format '%(path)s:%(row)d:%(col)d: %(code)s %(code)s %(text)s' --stdin-display-name ${INPUT} -",
+    lintCommand = "flake8 --max-line-length 120 --extend-ignore F403,F405 --format '%(path)s:%(row)d:%(col)d: %(code)s %(code)s %(text)s' --stdin-display-name ${INPUT} -",
+})
+
+black = vim.tbl_extend("force", black, {
+    prefix = "black: max-line-length=120",
+    formatCommand = "black --no-color -q -l 120 -",
 })
 
 -- Setup formatter and linter for efmls here
@@ -316,7 +321,7 @@ efmls.setup({
     lua = { formatter = stylua },
     c = { formatter = clangfmt },
     cpp = { formatter = clangfmt },
-    python = { formatter = black },
+    python = { formatter = black, linter = flake8 },
     vue = { formatter = prettier },
     typescript = { formatter = prettier, linter = eslint },
     javascript = { formatter = prettier, linter = eslint },
