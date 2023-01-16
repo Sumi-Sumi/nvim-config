@@ -421,15 +421,20 @@ function config.bufferline_nvim()
                     text_align = "center",
                     highlight = "Directory",
                     separator = true
-                }
+                },
+                {
+                    filetype = "lspsagaoutline",
+                    text = "Lspsaga Outline",
+                    text_align = "center",
+                    padding = 1,
+                },
             },
         },
         highlights = {}
     }
 
     if vim.g.colors_name == "catppuccin" then
-        local cp = require("catppuccin.palettes").get_palette() -- Get the palette.
-        cp.none = "NONE" -- Special setting for complete transparent fg/bg.
+        local cp = require("utils.color").get_palette()
 
         local catppuccin_hl_overwrite = {
             highlights = require("catppuccin.groups.integrations.bufferline").get({
@@ -608,6 +613,39 @@ function config.lualine()
         return icons.ui.RootFolderOpened .. cwd
     end
 
+    local function lspsaga_symbols()
+        local exclude = {
+            ["terminal"] = true,
+            ["toggleterm"] = true,
+            ["prompt"] = true,
+            ["NvimTree"] = true,
+            ["help"] = true,
+        }
+        if vim.api.nvim_win_get_config(0).zindex or exclude[vim.bo.filetype] then
+            return "" -- Excluded filetypes
+        else
+            local ok, lspsaga = pcall(require, "lspsaga.symbolwinbar")
+            if ok then
+                if lspsaga:get_winbar() ~= nil then
+                    return lspsaga:get_winbar()
+                else
+                    return "" -- Cannot get node
+                end
+            end
+        end
+    end
+
+    local function diff_source()
+        local gitsigns = vim.b.gitsigns_status_dict
+        if gitsigns then
+            return {
+                added = gitsigns.added,
+                modified = gitsigns.changed,
+                removed = gitsigns.removed,
+            }
+        end
+    end
+
     local function nix_env()
         local env = os.getenv("NIX_ENV")
         if env ~= nil then
@@ -671,9 +709,9 @@ function config.lualine()
             },
           },
         sections = {
-            lualine_a = { { "mode" }},
-            lualine_b = { { "branch" }, { "diff" }},
-            lualine_c = { { get_cmd }},
+            lualine_a = { { "mode" } },
+            lualine_b = { { get_cmd } },
+            lualine_c = { { "branch" }, { "diff", source = diff_source } },
             lualine_x = {
                 { escape_status },
                 {
@@ -684,7 +722,7 @@ function config.lualine()
                         warn = icons.diagnostics.Warning,
                         info = icons.diagnostics.Information,
                     }
-                }
+                },
             },
             lualine_y = {
                 {
@@ -708,14 +746,21 @@ function config.lualine()
             lualine_z = { "progress", "location" }
         },
         inactive_sections = {
-            lualine_a = {},
+            lualine_a = { { lspsaga_symbols }},
             lualine_b = {},
             lualine_c = { "filename" },
             lualine_x = { "location" },
             lualine_y = {},
             lualine_z = {}
         },
-        tabline = {},
+        winbar = {
+            lualine_a = { { lspsaga_symbols } },
+            lualine_b = {},
+            lualine_c = {},
+            lualine_x = {},
+            lualine_y = {},
+            lualine_z = {}
+        },
         extensions = {
             "fugitive",
             "neo-tree",

@@ -26,28 +26,9 @@ function config.lspsaga()
         end
     end
 
-    local function get_palette()
-        if vim.g.colors_name == "catppuccin" then
-            -- If the colorscheme is catppuccin then use the palette.
-            return require("catppuccin.palettes").get_palette()
-        else
-            -- Default behavior: return lspsaga's default palette.
-            local palette = require("lspsaga.lspkind").colors
-            palette.peach = palette.orange
-            palette.flamingo = palette.orange
-            palette.rosewater = palette.yellow
-            palette.mauve = palette.violet
-            palette.sapphire = palette.blue
-            palette.maroon = palette.orange
-
-            return palette
-        end
-    end
-
     set_sidebar_icons()
 
-    local colors = get_palette()
-
+    local colors = require("utils.color").get_palette()
     local opts = {
         preview = {
             lines_above = 1,
@@ -191,10 +172,8 @@ function config.lspsaga()
             },
         },
     }
-
     require("lspsaga").setup(opts)
 end
-
 
 function config.cmp()
     local icons = {

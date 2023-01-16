@@ -27,7 +27,8 @@ cmp["L3MON4D3/LuaSnip"] = {
 
 cmp["glepnir/lspsaga.nvim"] = {
     opt = true,
-    event = "LspAttach",
+    --event = "LspAttach",
+    after = "nvim-lspconfig",
     config = conf.lspsaga,
 }
 

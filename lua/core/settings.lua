@@ -6,5 +6,6 @@ settings["format_on_save"] = true
 settings["format_disabled_dirs"] = {
     home .. "/format_disabled_dir_under_home",
 }
+settings["palette_overwrite"] = {}
 
 return settings
