@@ -148,10 +148,10 @@ local load_core = function()
 
     require("core.options")
     require("core.keymap")
-    require("modules.keymap")
     require("core.filetype")
     require("core.event")
     pack.load_compile()
+    require("modules.keymap")
 
     -- vim.api.nvim_command([[set background=light]])
     vim.api.nvim_command([[colorscheme catppuccin]])

@@ -1,6 +1,19 @@
 local bind = require("utils.keybind")
 local map_cr, map_cu, map_cmd = bind.map_cr, bind.map_cu, bind.map_cmd
 
+local _lazygit = nil
+local function toggle_lazygit()
+    if not _lazygit then
+        local Terminal = require("toggleterm.terminal").Terminal
+        _lazygit = Terminal:new({
+            cmd = "lazygit",
+            hidden = true,
+            direction = "float",
+        })
+    end
+    _lazygit:toggle()
+end
+
 
 local plug_keymap = {
     -- Packer
@@ -47,13 +60,15 @@ local plug_keymap = {
     ["n|g["] = map_cr("Lspsaga diagnostic_jump_prev"):with_silent(),
     ["n|g]"] = map_cr("Lspsaga diagnostic_jump_next"):with_silent(),
     ["n|gs"] = map_cr("Lspsaga show_cursor_diagnostics"):with_silent(),
-    ["n|gS"] = map_cr("Lspsaga show_line_diagnostics"):with_silent(),
+    ["n|gl"] = map_cr("Lspsaga show_line_diagnostics"):with_silent(),
     ["n|gr"] = map_cr("Lspsaga rename"):with_silent(),
     ["n|K"] = map_cr("Lspsaga hover_doc"):with_silent(),
+    ["n|gd"] = map_cr("Lspsaga peek_definition"):with_silent(),
+    ["n|gD"] = map_cr("Lspsaga goto_definition"):with_silent(),
     ["n|ca"] = map_cr("Lspsaga code_action"):with_silent(),
     ["v|ca"] = map_cu("Lspsaga code_action"):with_silent(),
-    ["n|gd"] = map_cr("Lspsaga peek_definition"):with_silent(),
-    ["n|gD"] = map_cr("lua vim.lsp.buf.definition()"):with_silent(),
+    ["n|<leader>ci"] = map_cr("Lspsaga incoming_calls"):with_silent(),
+    ["n|<leader>co"] = map_cr("Lspsaga outgoing_calls"):with_silent(),
     -- hop.nvim
     ["n|<leader>w"] = map_cu("HopWord"),
     ["n|<leader>l"] = map_cu("HopLineStart"),
@@ -81,6 +96,8 @@ local plug_keymap = {
     ["n|<leader>gr"] = map_cr("Git rebase"),
     ["n|<leader>gm"] = map_cmd("GMove"),
     ["n|<leader>gD"] = map_cr("GDelete!"),
+    ["n|<leader>gl"] = map_cmd(toggle_lazygit):with_silent(),
+    ["t|<leader>gl"] = map_cmd(toggle_lazygit):with_silent(),
     -- nvim-comment
     ["n|gcc"] = map_cr("CommentToggle"),
     -- neo-tree

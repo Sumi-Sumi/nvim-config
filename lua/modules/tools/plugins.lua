@@ -104,7 +104,8 @@ tools["gelguy/wilder.nvim"] = {
 
 tools["akinsho/toggleterm.nvim"] = {
     opt = true,
-    cmd = "ToggleTerm",
+    -- cmd = "ToggleTerm",
+    event = "UIEnter",
     config = conf.toggleterm
 }
 
