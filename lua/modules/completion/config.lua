@@ -257,22 +257,22 @@ function config.cmp()
         },
         -- You should specify your *installed* sources.
         sources = {
-            { name = "buffer" },
-            { name = "copilot" },
-            { name = "latex_symbols" },
-            { name = "luasnip" },
+            -- { name = "omni" },
             { name = "nvim_lsp" },
             { name = "nvim_lua" },
-            { name = "orgmode" },
+            { name = "luasnip" },
             { name = "path" },
             { name = "spell" },
             { name = "tmux" },
+            { name = "orgmode" },
+            { name = "buffer" },
+            { name = "latex_symbols" },
+            { name = "copilot" },
         },
     }
 
     cmp.setup(opts)
 end
-
 
 function config.luasnip()
     local vim_path = require("core.global").vim_path
@@ -292,39 +292,38 @@ function config.luasnip()
     require("luasnip.loaders.from_snipmate").lazy_load()
 end
 
-
 -- function config.tabnine()
 --  local tabnine = require("cmp_tabnine.config")
 --  tabnine:setup({ max_line = 1000, max_num_results = 20, sort = true })
 -- end
 
-
 function config.autopairs()
     require("nvim-autopairs").setup()
-    local npairs = require('nvim-autopairs')
-    local Rule   = require('nvim-autopairs.rule')
+    local npairs = require("nvim-autopairs")
+    local Rule = require("nvim-autopairs.rule")
 
-    local brackets = { { '(', ')' }, { '[', ']' }, { '{', '}' } }
-    npairs.add_rules {
-    Rule(' ', ' ')
-        :with_pair(function (opts)
-        local pair = opts.line:sub(opts.col - 1, opts.col)
-        return vim.tbl_contains({
-            brackets[1][1]..brackets[1][2],
-            brackets[2][1]..brackets[2][2],
-            brackets[3][1]..brackets[3][2],
-        }, pair)
-        end)
-    }
-    for _,bracket in pairs(brackets) do
-    npairs.add_rules {
-        Rule(bracket[1]..' ', ' '..bracket[2])
-        :with_pair(function() return false end)
-        :with_move(function(opts)
-            return opts.prev_char:match('.%'..bracket[2]) ~= nil
-        end)
-        :use_key(bracket[2])
-    }
+    local brackets = { { "(", ")" }, { "[", "]" }, { "{", "}" } }
+    npairs.add_rules({
+        Rule(" ", " "):with_pair(function(opts)
+            local pair = opts.line:sub(opts.col - 1, opts.col)
+            return vim.tbl_contains({
+                brackets[1][1] .. brackets[1][2],
+                brackets[2][1] .. brackets[2][2],
+                brackets[3][1] .. brackets[3][2],
+            }, pair)
+        end),
+    })
+    for _, bracket in pairs(brackets) do
+        npairs.add_rules({
+            Rule(bracket[1] .. " ", " " .. bracket[2])
+                :with_pair(function()
+                    return false
+                end)
+                :with_move(function(opts)
+                    return opts.prev_char:match(".%" .. bracket[2]) ~= nil
+                end)
+                :use_key(bracket[2]),
+        })
     end
 
     -- If you want insert `(` after select function or method item
@@ -351,7 +350,6 @@ function config.autopairs()
         })
     )
 end
-
 
 function config.mason_install()
     require("mason-tool-installer").setup({
@@ -387,7 +385,6 @@ function config.mason_install()
     })
 end
 
-
 function config.copilot()
     vim.defer_fn(function()
         require("copilot").setup({
@@ -397,6 +394,5 @@ function config.copilot()
         })
     end, 100)
 end
-
 
 return config

@@ -1,54 +1,46 @@
 local config = {}
 
-
 function config.better_escape()
     local opts = {
         mapping = { "jk", "jj" },
         timeout = vim.g.timeoutlen,
-        keys = "<esc>"
+        keys = "<esc>",
     }
 
     require("better_escape").setup(opts)
 end
 
-
 function config.clever_f()
-    vim.api.nvim_set_hl(
-        0,
-        "CleverChar",
-        {
-            underline = true,
-            bold = true,
-            fg = "Orange",
-            bg = "NONE",
-            ctermfg = "Red",
-            ctermbg = "NONE"
-        }
-    )
+    vim.api.nvim_set_hl(0, "CleverChar", {
+        underline = true,
+        bold = true,
+        fg = "Orange",
+        bg = "NONE",
+        ctermfg = "Red",
+        ctermbg = "NONE",
+    })
     vim.g.clever_f_mark_char_color = "CleverChar"
     vim.g.clever_f_mark_direct_color = "CleverChar"
     vim.g.clever_f_mark_direct = true
     vim.g.clever_f_timeout_ms = 1500
 end
 
-
 function config.hop()
-    require("hop").setup { keys = 'etovxqpdygfblzhckisuran' }
+    require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
 end
-
 
 function config.neoscroll()
     local opts = {
         mappings = {
-            '<C-u>',
-            '<C-d>',
-            '<C-b>',
-            '<C-f>',
-            '<C-y>',
-            '<C-e>',
-            'zt',
-            'zz',
-            'zb'
+            "<C-u>",
+            "<C-d>",
+            "<C-b>",
+            "<C-f>",
+            "<C-y>",
+            "<C-e>",
+            "zt",
+            "zz",
+            "zb",
         },
         cursor_scrolls_alone = true,
         performance_mode = true,
@@ -56,16 +48,14 @@ function config.neoscroll()
     require("neoscroll").setup(opts)
 end
 
-
 function config.nvim_comment()
     local opts = {
         hook = function()
             require("ts_context_commentstring.internal").update_commentstring()
-        end
+        end,
     }
     require("nvim_comment").setup(opts)
 end
-
 
 function config.open_browser()
     vim.g.openbrowser_search_engines = {
@@ -93,47 +83,44 @@ function config.open_browser()
     vim.g.openbrowser_use_vimproc = 1
 end
 
-
 function config.todo_comments()
     local icons = {
         ui = require("modules.ui.icons").get("ui", true),
-        diagnostics = require("modules.ui.icons").get("diagnostics", true)
+        diagnostics = require("modules.ui.icons").get("diagnostics", true),
     }
     local opts = {
         keywords = {
             FIX = {
-              icon = icons.ui.Bug,
-              color = "error",
-              alt = { "FIXME", "BUG", "FIXIT", "ISSUE" },
+                icon = icons.ui.Bug,
+                color = "error",
+                alt = { "FIXME", "BUG", "FIXIT", "ISSUE" },
             },
             TODO = {
                 icon = icons.ui.Check,
-                color = "info"
+                color = "info",
             },
             HACK = {
                 icon = icons.ui.Fire,
-                color = "warning"
+                color = "warning",
             },
             WARN = {
                 icon = icons.diagnostics.Warning,
                 color = "warning",
-                alt = { "WARNING", "XXX" }
+                alt = { "WARNING", "XXX" },
             },
             PERF = {
                 icon = icons.ui.Perf,
-                alt = { "OPTIM",
-                "PERFORMANCE",
-                "OPTIMIZE" }
+                alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" },
             },
             NOTE = {
                 icon = icons.ui.Note,
                 color = "hint",
-                alt = { "INFO" }
+                alt = { "INFO" },
             },
             TEST = {
                 icon = icons.ui.CodeAction,
                 color = "test",
-                alt = { "TESTING", "PASSED", "FAILED" }
+                alt = { "TESTING", "PASSED", "FAILED" },
             },
         },
         highlight = {
@@ -146,7 +133,7 @@ function config.todo_comments()
             info = { "DiagnosticInfo", "#2563EB" },
             hint = { "DiagnosticHint", "#10B981" },
             default = { "Identifier", "#7C3AED" },
-            test = { "Identifier", "#FF00FF" }
+            test = { "Identifier", "#FF00FF" },
         },
         search = {
             command = "rg",
@@ -164,18 +151,15 @@ function config.todo_comments()
         },
     }
     require("todo-comments").setup(opts)
-
 end
-
 
 function config.better_whitespace()
     vim.g.better_whitespace_enabled = 0
     vim.g.better_whitespace_on_save = 0
     vim.g.current_line_whitespace_disabled_soft = 1
     vim.g.strip_whitespace_on_save = 1
-    vim.g.strip_whitespace_confirm=0
+    vim.g.strip_whitespace_confirm = 0
 end
-
 
 function config.surround()
     local opts = {
@@ -196,5 +180,40 @@ function config.surround()
     require("nvim-surround").setup(opts)
 end
 
-return config
+function config.skkeleton()
+    local function file_exists(file)
+        local f = io.open(file, "rb")
+        if f then
+            f:close()
+        end
+        return f ~= nil
+    end
 
+    -- get all lines from a file, returns an empty
+    -- list/table if the file does not exist
+    local function lines_from(file)
+        if not file_exists(file) then
+            return {}
+        end
+        local lines = {}
+        for line in io.lines(file) do
+            if string.find(line, "server") == nil then
+                lines[#lines + 1] = line
+            end
+        end
+        return lines
+    end
+    local global = require("core.global")
+    local utils = require("utils")
+    local dict_path = utils.joinpath(global.home, ".local", "share", "fcitx5", "skk", "dictionary_list")
+    vim.g.globalDictionaries = lines_from(dict_path)
+    vim.g.globalJisyoEncoding = "utf-8"
+    vim.g.showCandidatesCount = 0
+    vim.g.skkServerReqEnc = "utf-8"
+    vim.g.skkServerResEnc = "utf-8"
+    vim.g.useSkkServer = false
+    vim.g.userJisyo = global.state_dir
+    -- vim.fn["skkeleton#register_keymap"]()
+end
+
+return config

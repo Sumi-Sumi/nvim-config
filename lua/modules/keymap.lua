@@ -14,7 +14,6 @@ local function toggle_lazygit()
     _lazygit:toggle()
 end
 
-
 local plug_keymap = {
     -- Packer
     ["n|<leader><C-p>s"] = map_cr("PackerSync"):with_silent():with_nowait(),
@@ -155,7 +154,11 @@ local plug_keymap = {
     ["n|<leader>D"] = map_cr("DiffviewOpen"):with_silent(),
     ["n|<leader><leader>D"] = map_cr("DiffviewClose"):with_silent(),
     -- Plugin Legendary
-    ["n|<leader>p"] = map_cr("Legendary"):with_silent(),   ["n|gh"] = map_cr("Lspsaga lsp_finder"):with_silent(),
+    ["n|<leader>p"] = map_cr("Legendary"):with_silent(),
+    ["n|gh"] = map_cr("Lspsaga lsp_finder"):with_silent(),
+    -- Plugin skkeleton
+    ["i|<C-k>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
+    ["c|<C-k>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
 }
 
 bind.nvim_load_mapping(plug_keymap)

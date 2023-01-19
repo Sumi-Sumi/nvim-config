@@ -1,7 +1,6 @@
 local cmp = {}
 local conf = require("modules.completion.config")
 
-
 cmp["zbirenbaum/copilot.lua"] = {
     event = "VimEnter",
     config = conf.copilot,
@@ -34,7 +33,7 @@ cmp["glepnir/lspsaga.nvim"] = {
 
 cmp["ray-x/lsp_signature.nvim"] = {
     opt = true,
-    after = "nvim-lspconfig"
+    after = "nvim-lspconfig",
 }
 
 cmp["windwp/nvim-autopairs"] = {
@@ -57,13 +56,14 @@ cmp["hrsh7th/nvim-cmp"] = {
         { "hrsh7th/cmp-path", after = "cmp-nvim-lua" },
         { "f3fora/cmp-spell", after = "cmp-path" },
         { "andersevenrud/cmp-tmux", after = "cmp-spell" },
+        { "hrsh7th/cmp-omni", after = "cmp-tmux" },
     },
     config = conf.cmp,
 }
 
 cmp["neovim/nvim-lspconfig"] = {
     opt = true,
-    event =  "BufReadPre",
+    event = "BufReadPre",
     cmd = "LspStart",
     config = conf.nvim_lsp,
 }
@@ -71,7 +71,7 @@ cmp["neovim/nvim-lspconfig"] = {
 cmp["williamboman/mason.nvim"] = {
     opt = false,
     requires = {
-        { "williamboman/mason-lspconfig.nvim", },
+        { "williamboman/mason-lspconfig.nvim" },
         { "WhoIsSethDaniel/mason-tool-installer.nvim", config = conf.mason_install },
     },
 }

@@ -1,31 +1,28 @@
 local config = {}
 
-
 function config.flutter_tools()
     local opts = {
         decorations = {
             statusline = {
                 app_version = true,
-                device = true
+                device = true,
             },
         },
         lsp = {
             color = {
                 enable = true,
-                background = true
+                background = true,
             },
         },
     }
     require("flutter-tools").setup(opts)
 end
 
-
 function config.md_preview()
     local utils = require("utils")
     vim.g.mkdp_markdown_css = utils.joinpath(vim.fn.stdpath("config"), "lua", "modules", "lang", "md_preview", "github-markdown.css")
     vim.g.mkdp_filetypes = { "markdown" }
 end
-
 
 function config.rust_tools()
     vim.api.nvim_command([[packadd nvim-lspconfig]])
@@ -213,21 +210,19 @@ function config.rust_tools()
     require("rust-tools").setup(opts)
 end
 
-
 function config.vim_go()
     vim.g.go_doc_keywordprg_enabled = 0
     vim.g.go_def_mapping_enabled = 0
     vim.g.go_code_completion_enabled = 0
 end
 
-
 function config.vimtex()
     local viewer = "zathura"
     vim.g.vimtex_view_method = viewer
     vim.g.vimtex_view_general_viewer = viewer
     vim.g.vimtex_view_forward_search_on_start = false
+    vim.g.vimtex_syntax_enabled = 0
+    vim.g.vimtex_complete_enabled = 0
 end
 
-
 return config
-

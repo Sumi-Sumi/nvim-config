@@ -11,7 +11,6 @@ local mason_lsp = require("mason-lspconfig")
 
 require("lspconfig.ui.windows").default_options.border = "single"
 
-
 local function return_exe_value(cmd)
     local handle = io.popen(cmd)
     local result = handle:read("*a")
@@ -31,22 +30,25 @@ if is_linux and vim.api.nvim_exec("!cat /etc/os-release | grep '^NAME'", true):f
             -- This is the same for all packages, so compute only once
             -- Set the interpreter on the binary
             local nvim = return_exe_value("nix path-info -r /run/current-system | grep neovim-unwrapped"):sub(1, -2)
+            local search = "nix path-ifno -r /run/current-system"
             local interpreter = return_exe_value(("patchelf --print-interpreter %q" .. "/bin/nvim"):format(nvim)):sub(1, -2)
             for _, rel_path in pairs(receipt.links.bin) do
                 local bin_abs_path = pkg:get_install_path() .. "/" .. rel_path
                 if pkg.name == "lua-language-server" then
                     bin_abs_path = pkg:get_install_path() .. "/extension/server/bin/lua-language-server"
-                    os.execute(
-                        ("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path)
-                    )
+                    os.execute(("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path))
                 elseif pkg.name == "marksman" then
                     bin_abs_path = pkg:get_install_path() .. "/marksman"
-                    local libstdcpp = return_exe_value("nix path-info -r /run/current-system | grep gcc | grep lib | head -n1"):sub(1, -2) .. "/lib"
+                    local libstdcpp = return_exe_value("%s | grep gcc | grep lib | head -n1"):format(search):sub(1, -2) .. "/lib"
                     local zlib = return_exe_value("nix path-info -r /run/current-system | grep zlib | head -n1"):sub(1, -2) .. "/lib"
                     local icu4c = return_exe_value("nix path-info -r /run/current-system | grep icu4c | head -n1"):sub(1, -2) .. "/lib"
-                    os.execute(
-                        ("patchelf --set-interpreter %s --set-rpath %s:%s:%s %s"):format(interpreter, libstdcpp, zlib, icu4c, bin_abs_path)
-                    )
+                    os.execute(("patchelf --set-interpreter %s --set-rpath %s:%s:%s %s"):format(interpreter, libstdcpp, zlib, icu4c, bin_abs_path))
+                elseif pkg.name == "stylua" then
+                    bin_abs_path = pkg:get_install_path() .. "/stylua"
+                    os.execute(("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path))
+                elseif pkg.name == "texlab" then
+                    bin_abs_path = pkg:get_install_path() .. "/texlab"
+                    os.execute(("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path))
                 end
             end
         end)
@@ -58,7 +60,6 @@ mason.setup({
         border = "rounded",
     },
 })
-
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
@@ -99,7 +100,6 @@ local function switch_source_header_splitcmd(bufnr, splitcmd)
     end
 end
 
-
 -- LSP configs
 -- Override server settings here
 local configs = {
@@ -108,6 +108,35 @@ local configs = {
     pyright = {},
     rnix = {},
     marksman = {},
+    texlab = {
+        cmd = { "texlab", "-v", "--log-file=/home/sumi/texlab.log" },
+        capabilities = capabilities,
+        settings = {
+            texlab = {
+                auxDirectory = "./build",
+                bibtexFormatter = "texlab",
+                build = {
+                    args = { "%f" },
+                    executable = "latexmk",
+                    forwardSearchAfter = false,
+                    onSave = false,
+                },
+                chktex = {
+                    onEdit = true,
+                    onOpenAndSave = false,
+                },
+                diagnosticsDelay = 100,
+                formatterLineLength = 120,
+                forwardSearch = {
+                    args = {},
+                },
+                latexFormatter = "latexindent",
+                latexindent = {
+                    modifyLineBreaks = false,
+                },
+            },
+        },
+    },
     gopls = {
         on_attach = custom_attach,
         flags = { debounce_text_changes = 500 },
@@ -251,19 +280,18 @@ local configs = {
         flags = { debounce_text_changes = 500 },
         capabilities = capabilities,
         on_attach = custom_attach,
-    }
+    },
 }
 
 local _lsp = {}
 local n = 0
-for k,_ in pairs(configs) do
+for k, _ in pairs(configs) do
     n = n + 1
     _lsp[n] = k
 end
 mason_lsp.setup({
-    ensure_installed = _lsp
+    ensure_installed = _lsp,
 })
-
 for _, server in ipairs(mason_lsp.get_installed_servers()) do
     nvim_lsp[server].setup(configs[server])
     -- elseif server ~= "efm" then
@@ -312,6 +340,11 @@ flake8 = vim.tbl_extend("force", flake8, {
 black = vim.tbl_extend("force", black, {
     prefix = "black: max-line-length=120",
     formatCommand = "black --no-color -q -l 120 -",
+})
+
+stylua = vim.tbl_extend("force", black, {
+    prefix = "stylua: --indent-type Spaces",
+    formatCommand = "stylua --indent-type Spaces --column-width 150 -",
 })
 
 -- Setup formatter and linter for efmls here
