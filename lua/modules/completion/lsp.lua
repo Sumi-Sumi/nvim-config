@@ -19,6 +19,7 @@ local function return_exe_value(cmd)
     return result
 end
 
+--{{{ hook after mason-install
 -- Make mason packages work with nixos
 -- We're using patchelf to mathe that work
 -- Thanks to: https://github.com/williamboman/mason.nvim/issues/428#issuecomment-1357192515
@@ -54,7 +55,9 @@ if is_linux and vim.api.nvim_exec("!cat /etc/os-release | grep '^NAME'", true):f
         end)
     end)
 end
+-- }}}
 
+-- {{{ nvim-lsp configs
 mason.setup({
     ui = {
         border = "rounded",
@@ -108,35 +111,35 @@ local configs = {
     pyright = {},
     rnix = {},
     marksman = {},
-    texlab = {
-        cmd = { "texlab", "-v", "--log-file=/home/sumi/texlab.log" },
-        capabilities = capabilities,
-        settings = {
-            texlab = {
-                auxDirectory = "./build",
-                bibtexFormatter = "texlab",
-                build = {
-                    args = { "%f" },
-                    executable = "latexmk",
-                    forwardSearchAfter = false,
-                    onSave = false,
-                },
-                chktex = {
-                    onEdit = true,
-                    onOpenAndSave = false,
-                },
-                diagnosticsDelay = 100,
-                formatterLineLength = 120,
-                forwardSearch = {
-                    args = {},
-                },
-                latexFormatter = "latexindent",
-                latexindent = {
-                    modifyLineBreaks = false,
-                },
-            },
-        },
-    },
+    -- texlab = {
+    --     cmd = { "texlab", "-v", "--log-file=/home/sumi/texlab.log" },
+    --     capabilities = capabilities,
+    --     settings = {
+    --         texlab = {
+    --             auxDirectory = "./build",
+    --             bibtexFormatter = "texlab",
+    --             build = {
+    --                 args = { "%f" },
+    --                 executable = "latexmk",
+    --                 forwardSearchAfter = false,
+    --                 onSave = false,
+    --             },
+    --             chktex = {
+    --                 onEdit = true,
+    --                 onOpenAndSave = false,
+    --             },
+    --             diagnosticsDelay = 100,
+    --             formatterLineLength = 120,
+    --             forwardSearch = {
+    --                 args = {},
+    --             },
+    --             latexFormatter = "latexindent",
+    --             latexindent = {
+    --                 modifyLineBreaks = false,
+    --             },
+    --         },
+    --     },
+    -- },
     gopls = {
         on_attach = custom_attach,
         flags = { debounce_text_changes = 500 },
@@ -301,7 +304,9 @@ for _, server in ipairs(mason_lsp.get_installed_servers()) do
     --     })
     -- end
 end
+-- }}}
 
+-- {{{ efmls-config
 local efmls = require("efmls-configs")
 
 -- Init `efm-langserver` here.
@@ -370,3 +375,4 @@ efmls.setup({
 })
 
 formatting.configure_format_on_save()
+-- }}}

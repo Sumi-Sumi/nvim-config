@@ -3,6 +3,7 @@ local g, o, fn, api = vim.g, vim.o, vim.fn, vim.api
 local config = {}
 
 
+--{{{ dap
 function config.dap()
     local icons = { dap = require("modules.ui.icons").get("dap") }
 
@@ -108,8 +109,10 @@ function config.dap()
         end, 100)
     end
 end
+-- }}}
 
 
+-- {{{ dapui
 function config.dapui()
     local icons = {
         ui = require("modules.ui.icons").get("ui"),
@@ -168,6 +171,7 @@ function config.dapui()
 
     require("dapui").setup(opts)
 end
+-- }}}
 
 
 return config

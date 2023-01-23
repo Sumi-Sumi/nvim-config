@@ -2,6 +2,7 @@ local config = {}
 local use_ssh = require("pack_utils.settings").use_ssh
 
 
+-- {{{ vim-illuminate
 function config.vim_illuminate()
     local opts = {
         providers = {
@@ -28,8 +29,10 @@ function config.vim_illuminate()
 
     require("illuminate").configure(opts)
 end
+-- }}}
 
 
+-- {{{ neodim
 function config.neodim()
     local normal_background = vim.api.nvim_get_hl_by_name("Normal", true).background
     local opts = {
@@ -48,13 +51,17 @@ function config.neodim()
 
     require("neodim").setup(opts)
 end
+-- }}}
 
 
+-- {{{ nvim-colorizer
 function config.nvim_colorizer()
     require("colorizer").setup()
 end
+-- }}}
 
 
+-- {{{ nvim-treesitter
 function config.nvim_treesitter()
     local km = { textobject = require("modules.lazy_keymap").textobject() }
     local opts = {
@@ -125,13 +132,14 @@ function config.nvim_treesitter()
 
     require("nvim-treesitter.configs").setup(opts)
     require("nvim-treesitter.install").prefer_git = true
-        if use_ssh then
-            local parsers = require("nvim-treesitter.parsers").get_parser_configs()
-            for _, p in pairs(parsers) do
-                p.install_info.url = p.install_info.url:gsub("https://github.com/", "git@github.com:")
-            end
+    if use_ssh then
+        local parsers = require("nvim-treesitter.parsers").get_parser_configs()
+        for _, p in pairs(parsers) do
+            p.install_info.url = p.install_info.url:gsub("https://github.com/", "git@github.com:")
         end
     end
+end
+-- }}}
 
 
 return config

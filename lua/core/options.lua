@@ -129,6 +129,7 @@ local function load_options()
         switchbuf = "useopen",
         wildignore = search_ignore,
         wildmode = { "longest", "full" },
+        foldmethod="marker",
 
         inccommand = "nosplit",
         grepformat = "%f:%l:%c:%m",

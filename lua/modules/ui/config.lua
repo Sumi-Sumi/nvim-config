@@ -1,6 +1,7 @@
 local config = {}
 
 
+-- {{{ catppuccin
 function config.catppuccin()
     local opts = {
         flavour = "mocha", -- Can be one of: latte, frappe, macchiato, mocha
@@ -241,8 +242,10 @@ function config.catppuccin()
 
     require("catppuccin").setup(opts)
 end
+-- }}}
 
 
+-- {{{ onedark
 function config.onedark()
     local opts = {
         style = "darker",
@@ -272,8 +275,10 @@ function config.onedark()
 
     require('onedark').setup(opts)
 end
+-- }}}
 
 
+-- {{{ alpha
 function config.alpha()
     local alpha = require("alpha")
     local dashboard = require("alpha.themes.dashboard")
@@ -380,8 +385,10 @@ function config.alpha()
     alpha.setup(dashboard.opts)
 
 end
+-- }}}
 
 
+-- {{{ bufferline-nvim
 function config.bufferline_nvim()
     local icons = { ui = require("modules.ui.icons").get("ui") }
     local opts = {
@@ -458,8 +465,10 @@ function config.bufferline_nvim()
 
     require("bufferline").setup(opts)
 end
+-- }}}
 
 
+-- {{{ fidget
 function config.fidget()
     local opts = {
         window = {
@@ -468,8 +477,10 @@ function config.fidget()
     }
     require("fidget").setup(opts)
 end
+-- }}}
 
 
+-- {{{ gitsigns
 function config.gitsigns()
     local km = { gitsigns = require("modules.lazy_keymap").gitsigns }
 
@@ -532,8 +543,10 @@ function config.gitsigns()
     require("gitsigns").setup(opts)
     require("scrollbar.handlers.gitsigns").setup()
 end
+-- }}}
 
 
+-- {{{ indent-blackline
 function config.indent_blankline()
     local opts = {
         filetype_exclude = {
@@ -589,8 +602,10 @@ function config.indent_blankline()
 
     require("indent_blankline").setup(opts)
 end
+-- }}}
 
 
+-- {{{ lualine
 function config.lualine()
     local icons = {
         diagnostics = require("modules.ui.icons").get("diagnostics", true),
@@ -774,8 +789,10 @@ function config.lualine()
 
     require("lualine").setup(opts)
 end
+-- }}}
 
 
+-- {{{ nvim-hlslens
 function config.nvim_hlslens()
     local opts = {
         auto_enable = true,
@@ -783,8 +800,10 @@ function config.nvim_hlslens()
     }
     require("scrollbar.handlers.search").setup(opts)
 end
+-- }}}
 
 
+-- {{{ nvim-scrollbar
 function config.nvim_scrollbar()
     local text = { "-", "=" }
     local function get_color(name)
@@ -818,8 +837,10 @@ function config.nvim_scrollbar()
     }
     require("scrollbar").setup(opts)
 end
+-- }}}
 
 
+-- {{{ nvim-notify
 function config.notify()
     local icons = {
         diagnostics = require("modules.ui.icons").get("diagnostics"),
@@ -843,7 +864,7 @@ function config.notify()
     notify.setup(opts)
     vim.notify = notify
 end
-
+-- }}}
 
 
 return config
