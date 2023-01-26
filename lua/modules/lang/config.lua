@@ -228,7 +228,7 @@ function config.vimtex()
     vim.g.vimtex_view_general_viewer = viewer
     vim.g.vimtex_view_forward_search_on_start = false
     vim.g.vimtex_syntax_enabled = 0
-    --vim.g.vimtex_complete_enabled = 0
+    vim.g.vimtex_complete_enabled = 0
 end
 -- }}}
 

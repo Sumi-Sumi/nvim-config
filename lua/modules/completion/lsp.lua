@@ -109,35 +109,35 @@ local configs = {
     pyright = {},
     rnix = {},
     marksman = {},
-    -- texlab = {
-    --     cmd = { "texlab", "-v", "--log-file=/home/sumi/texlab.log" },
-    --     capabilities = capabilities,
-    --     settings = {
-    --         texlab = {
-    --             auxDirectory = "./build",
-    --             bibtexFormatter = "texlab",
-    --             build = {
-    --                 args = { "%f" },
-    --                 executable = "latexmk",
-    --                 forwardSearchAfter = false,
-    --                 onSave = false,
-    --             },
-    --             chktex = {
-    --                 onEdit = false,
-    --                 onOpenAndSave = false,
-    --             },
-    --             diagnosticsDelay = 200,
-    --             formatterLineLength = 120,
-    --             forwardSearch = {
-    --                 args = {},
-    --             },
-    --             latexFormatter = "latexindent",
-    --             latexindent = {
-    --                 modifyLineBreaks = false,
-    --             },
-    --         },
-    --     },
-    -- },
+    texlab = {
+        cmd = { "texlab", "-v", "--log-file=/home/sumi/texlab.log" },
+        capabilities = capabilities,
+        settings = {
+            texlab = {
+                auxDirectory = "./build",
+                bibtexFormatter = "texlab",
+                build = {
+                    args = { "%f" },
+                    executable = "latexmk",
+                    forwardSearchAfter = false,
+                    onSave = false,
+                },
+                chktex = {
+                    onEdit = false,
+                    onOpenAndSave = false,
+                },
+                diagnosticsDelay = 200,
+                formatterLineLength = 120,
+                forwardSearch = {
+                    args = {},
+                },
+                latexFormatter = "latexindent",
+                latexindent = {
+                    modifyLineBreaks = false,
+                },
+            },
+        },
+    },
     gopls = {
         on_attach = custom_attach,
         flags = { debounce_text_changes = 500 },
