@@ -15,12 +15,6 @@ local function toggle_lazygit()
 end
 
 local plug_keymap = {
-    -- Packer
-    ["n|<leader><C-p>s"] = map_cr("PackerSync"):with_silent():with_nowait(),
-    ["n|<leader><C-p>u"] = map_cr("PackerUpdate"):with_silent():with_nowait(),
-    ["n|<leader><C-p>i"] = map_cr("PackerInstall"):with_silent():with_nowait(),
-    ["n|<leader><C-p>c"] = map_cr("PackerComplete"):with_silent():with_nowait(),
-    ["n|<leader><C-p>C"] = map_cr("PackerClean"):with_silent():with_nowait(),
     -- hlslens.nvim
     ["n|n"] = map_cmd([[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]]):with_silent(),
     ["n|N"] = map_cmd([[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]]):with_silent(),
