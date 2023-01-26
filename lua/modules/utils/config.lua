@@ -12,7 +12,6 @@ function config.better_escape()
 end
 -- }}}
 
-
 -- {{{ better-whitespace
 function config.better_whitespace()
     vim.g.better_whitespace_enabled = 0
@@ -22,7 +21,6 @@ function config.better_whitespace()
     vim.g.strip_whitespace_confirm = 0
 end
 -- }}}
-
 
 -- {{{ clever-f
 function config.clever_f()
@@ -41,13 +39,11 @@ function config.clever_f()
 end
 -- }}}
 
-
 -- {{{ hop
 function config.hop()
     require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
 end
 -- }}}
-
 
 -- {{{ neoscroll
 function config.neoscroll()
@@ -70,7 +66,6 @@ function config.neoscroll()
 end
 -- }}}
 
-
 -- {{{ nvim-comment
 function config.nvim_comment()
     local opts = {
@@ -81,7 +76,6 @@ function config.nvim_comment()
     require("nvim_comment").setup(opts)
 end
 -- }}}
-
 
 -- {{{ open-browser
 function config.open_browser()
@@ -110,7 +104,6 @@ function config.open_browser()
     vim.g.openbrowser_use_vimproc = 1
 end
 -- }}}
-
 
 -- {{{ todo-comments
 function config.todo_comments()
@@ -184,7 +177,6 @@ function config.todo_comments()
 end
 -- }}}
 
-
 -- {{{ skkeleton
 function config.skkeleton()
     local function file_exists(file)
@@ -222,7 +214,6 @@ function config.skkeleton()
     -- vim.fn["skkeleton#register_keymap"]()
 end
 -- }}}
-
 
 -- {{{ surround
 function config.surround()

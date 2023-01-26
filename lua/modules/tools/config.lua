@@ -1,6 +1,5 @@
 local config = {}
 
-
 -- {{{ dressing
 function config.dressing()
     local opts = {
@@ -18,21 +17,8 @@ function config.dressing()
 end
 -- }}}
 
-
 -- {{{ legendary
 function config.legendary()
-    local plugins = {
-        "sqlite.lua",
-        "dressing.nvim"
-    }
-    for _,plugin in ipairs(plugins) do
-        vim.api.nvim_command(("packadd %s"):format(plugin))
-    end
-    local utils = require("utils")
-
-    local path = utils.joinpath(vim.fn.stdpath("cache"), "legendary")
-    utils.mkdir(path, 511)
-
     local opts = {
         which_key = {
             auto_register = true,
@@ -68,12 +54,11 @@ function config.legendary()
 end
 -- }}}
 
-
 -- {{{ neotree
 function config.neo_tree()
     local icons = {
         ui = require("modules.ui.icons").get("ui"),
-        git = require("modules.ui.icons").get("git")
+        git = require("modules.ui.icons").get("git"),
     }
     local km = { neo_tree = require("modules.lazy_keymap").neo_tree() }
     local opts = {
@@ -87,7 +72,7 @@ function config.neo_tree()
         },
         default_component_configs = {
             container = {
-                enable_character_fade = true
+                enable_character_fade = true,
             },
             indent = {
                 indent_size = 2,
@@ -119,18 +104,18 @@ function config.neo_tree()
             },
             git_status = {
                 symbols = {
-                -- Change type
-                added     = icons.git.Add,
-                modified  = icons.git.Mod_alt,
-                deleted   = icons.git.Remove,
-                renamed   = icons.git.Rename,
-                -- Status type
-                untracked = icons.git.Untraced,
-                ignored   = icons.git.Ignore,
-                unstaged  = icons.git.Unstaged,
-                staged    = icons.git.Staged,
-                conflict  = icons.git.Confilict
-                }
+                    -- Change type
+                    added = icons.git.Add,
+                    modified = icons.git.Mod_alt,
+                    deleted = icons.git.Remove,
+                    renamed = icons.git.Rename,
+                    -- Status type
+                    untracked = icons.git.Untraced,
+                    ignored = icons.git.Ignore,
+                    unstaged = icons.git.Unstaged,
+                    staged = icons.git.Staged,
+                    conflict = icons.git.Confilict,
+                },
             },
         },
         window = {
@@ -150,25 +135,24 @@ function config.neo_tree()
                 hide_gitignored = true,
                 hide_hidden = true, -- only works on Windows for hidden files/directories
                 hide_by_name = {
-                ".git",
+                    ".git",
                 },
                 hide_by_pattern = {
-                "*.meta",
-                --"*/src/*/tsconfig.json",
+                    "*.meta",
+                    --"*/src/*/tsconfig.json",
                 },
-                always_show = {
-                },
+                always_show = {},
                 never_show = {
-                ".DS_Store",
-                "__pycache__",
+                    ".DS_Store",
+                    "__pycache__",
                 },
                 never_show_by_pattern = {
-                --".null-ls_*",
+                    --".null-ls_*",
                 },
             },
             window = {
-                mappings = km.neo_tree.fs
-            }
+                mappings = km.neo_tree.fs,
+            },
         },
         buffers = {
             follow_current_file = true,
@@ -176,20 +160,19 @@ function config.neo_tree()
             group_empty_dirs = true, -- when true, empty folders will be grouped together
             show_unloaded = true,
             window = {
-                mappings = km.neo_tree.buf
+                mappings = km.neo_tree.buf,
             },
         },
         git_status = {
             window = {
                 position = "float",
-                mappings = km.neo_tree.git
-            }
-        }
+                mappings = km.neo_tree.git,
+            },
+        },
     }
     require("neo-tree").setup(opts)
 end
 -- }}}
-
 
 -- {{{ window-picker
 function config.window_picker()
@@ -197,81 +180,42 @@ function config.window_picker()
 end
 -- }}}
 
-
 -- {{{ sniprun
 function config.sniprun()
     local opts = {
-        selected_interpreters = {},     --# use those instead of the default for the current filetype
-        repl_enable = {},               --# enable REPL-like behavior for the given interpreters
-        repl_disable = {},              --# disable REPL-like behavior for the given interpreters
-
-        interpreter_options = {         --# interpreter-specific options, see docs / :SnipInfo <name>
-
-        --# use the interpreter name as key
-        GFM_original = {
-          use_on_filetypes = {"markdown.pandoc"}    --# the 'use_on_filetypes' configuration key is
-                                                    --# available for every interpreter
-        },
-        Python3_original = {
-            error_truncate = "auto"         --# Truncate runtime errors 'long', 'short' or 'auto'
-                                            --# the hint is available for every interpreter
-                                            --# but may not be always respected
-        }
-        },
-
-        --# you can combo different display modes as desired and with the 'Ok' or 'Err' suffix
-        --# to filter only sucessful runs (or errored-out runs respectively)
+        selected_interpreters = {}, -- " use those instead of the default for the current filetype
+        repl_enable = {}, -- " enable REPL-like behavior for the given interpreters
+        repl_disable = {}, -- " disable REPL-like behavior for the given interpreters
+        interpreter_options = {}, -- " intepreter-specific options, consult docs / :SnipInfo <name>
+        -- " you can combo different display modes as desired
         display = {
-        "Terminal",                --# display results in a vertical split
-        "Classic",                    --# display results in the command-line  area
-        "VirtualTextOk",              --# display ok results as virtual text (multiline is shortened)
+            "Classic", -- "display results in the command-line  area
+            "VirtualTextOk", -- "display ok results as virtual text (multiline is shortened)
+            "VirtualTextErr", -- "display error results as virtual text
+            -- "TempFloatingWindow",      -- "display results in a floating window
+            "LongTempFloatingWindow", -- "same as above, but only long results. To use with VirtualText__
+            -- "Terminal"                 -- "display results in a vertical split
         },
+        -- " miscellaneous compatibility/adjustement settings
+        inline_messages = 0, -- " inline_message (0/1) is a one-line way to display messages
+        -- " to workaround sniprun not being able to display anything
 
-        live_display = { "VirtualTextOk" }, --# display mode used in live_mode
-
-        display_options = {
-        terminal_width = 45,       --# change the terminal display option width
-        notification_timeout = 5   --# timeout for nvim_notify output
-        },
-
-        --# You can use the same keys to customize whether a sniprun producing
-        --# no output should display nothing or '(no output)'
-        show_no_output = {
-            "Classic",
-            "TempFloatingWindow",      --# implies LongTempFloatingWindow, which has no effect on its own
-        },
-
-        --# customize highlight groups (setting this overrides colorscheme)
-        snipruncolors = {
-            SniprunVirtualTextOk   =  {bg="#66eeff",fg="#000000",ctermbg="Cyan",cterfg="Black"},
-            SniprunFloatingWinOk   =  {fg="#66eeff",ctermfg="Cyan"},
-            SniprunVirtualTextErr  =  {bg="#881515",fg="#000000",ctermbg="DarkRed",cterfg="Black"},
-            SniprunFloatingWinErr  =  {fg="#881515",ctermfg="DarkRed"},
-        },
-
-        --# miscellaneous compatibility/adjustement settings
-        inline_messages = 0,             --# inline_message (0/1) is a one-line way to display messages
-                                       --# to workaround sniprun not being able to display anything
-
-        borders = 'single',              --# display borders around floating windows
-                                       --# possible values are 'none', 'single', 'double', or 'shadow'
-        live_mode_toggle='off'           --# live mode toggle, see Usage - Running for more info
+        borders = "shadow", -- " display borders around floating windows
+        -- " possible values are 'none', 'single', 'double', or 'shadow'
     }
+    require("sniprun").setup(opts)
 end
 -- }}}
-
 
 -- {{{ vimproc
-function config.vimproc()
-end
+function config.vimproc() end
 -- }}}
-
 
 -- {{{ trouble
 function config.trouble()
     local icons = {
         ui = require("modules.ui.icons").get("ui"),
-        diagnostics = require("modules.ui.icons").get("diagnostics")
+        diagnostics = require("modules.ui.icons").get("diagnostics"),
     }
     local opts = {
         position = "bottom", -- position of the list can be: bottom, top, left, right
@@ -289,7 +233,7 @@ function config.trouble()
         auto_close = false, -- automatically close the list when you have no diagnostics
         auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
         auto_fold = false, -- automatically fold a file trouble list at creation
-        auto_jump = {"lsp_definitions"}, -- for the given modes, automatically jump if there is only a single result
+        auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
         -- signs = {
         --     error = icons.ui.diagnostics.Error_alt,
         --     warning = icons.ui.diagnostics.Warning_alt,
@@ -297,13 +241,12 @@ function config.trouble()
         --     information = icons.ui.diagnostics.Information_alt,
         --     other = icons.ui.diagnostics.Question_alt
         -- },
-        use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+        use_diagnostic_signs = false, -- enabling this will use the signs defined in your lsp client
     }
 
     require("trouble").setup(opts)
 end
 -- }}}
-
 
 -- {{{ undotree
 function config.undotree()
@@ -313,10 +256,9 @@ function config.undotree()
         utils.mkdir(path)
     end
     vim.g.undofile = path
-    vim.g.undotree_WindowLayout = 3  -- LeftSideWindow
+    vim.g.undotree_WindowLayout = 3 -- LeftSideWindow
 end
 -- }}}
-
 
 -- {{{ which-key
 function config.which_key()
@@ -353,15 +295,14 @@ function config.which_key()
         disable = {
             filetype = {
                 "TelescopePrompt",
-                "neo-tree"
-            }
-        }
+                "neo-tree",
+            },
+        },
     }
 
     require("which-key").setup(opts)
 end
 -- }}}
-
 
 -- {{{ wilder
 function config.wilder()
@@ -371,23 +312,19 @@ function config.wilder()
     wilder.setup({ modes = { ":", "/", "?" } })
     wilder.set_option("use_python_remote_plugin", 0)
     wilder.set_option("pipeline", {
-        wilder.branch(
-            wilder.cmdline_pipeline({ use_python = 0, fuzzy = 1, fuzzy_filter = wilder.lua_fzy_filter() }),
-            wilder.vim_search_pipeline(),
-            {
-                wilder.check(function(_, x)
-                    return x == ""
-                end),
-                wilder.history(),
-                wilder.result({
-                    draw = {
-                        function(_, x)
-                            return icons.ui.Calendar .. " " .. x
-                        end,
-                    },
-                }),
-            }
-        ),
+        wilder.branch(wilder.cmdline_pipeline({ use_python = 0, fuzzy = 1, fuzzy_filter = wilder.lua_fzy_filter() }), wilder.vim_search_pipeline(), {
+            wilder.check(function(_, x)
+                return x == ""
+            end),
+            wilder.history(),
+            wilder.result({
+                draw = {
+                    function(_, x)
+                        return icons.ui.Calendar .. " " .. x
+                    end,
+                },
+            }),
+        }),
     })
 
     local popupmenu_renderer = wilder.popupmenu_renderer(wilder.popupmenu_border_theme({
@@ -422,7 +359,6 @@ function config.wilder()
 end
 -- }}}
 
-
 -- {{{ toggleterm
 function config.toggleterm()
     local opts = {
@@ -446,31 +382,15 @@ function config.toggleterm()
         persist_size = true,
         direction = "horizontal",
         close_on_exit = true,
-        shell = vim.o.shell
+        shell = vim.o.shell,
     }
 
     require("toggleterm").setup(opts)
 end
 -- }}}
 
-
 -- {{{ telescope
 function config.telescope()
-    local plugins = {
-        "sqlite.lua",
-        "telescope-bookmarks.nvim",
-        "telescope-frecency.nvim",
-        "telescope-fzf-native.nvim",
-        "telescope-http.nvim",
-        "telescope-live-grep-args.nvim",
-        "telescope-project.nvim",
-        "telescope-software-licenses.nvim",
-        "telescope-zoxide",
-    }
-    for _,plugin in ipairs(plugins) do
-        vim.api.nvim_command(("packadd %s"):format(plugin))
-    end
-
     local icons = {
         ui = require("modules.ui.icons").get("ui", true),
     }
@@ -504,7 +424,7 @@ function config.telescope()
                 ".git/",
                 ".cache",
                 "%.class",
-                "%.meta"
+                "%.meta",
             },
             layout_config = {
                 horizontal = {
@@ -520,16 +440,16 @@ function config.telescope()
                 case_mode = "smart_case",
             },
             frecency = {
-                  show_scores = false,
-                  show_unindexed = true,
-                  ignore_patterns = {
-                      "*.git/*",
-                      "*/tmp/*",
-                      "*/__pycache__/*",
-                      "*.meta",
-                      "*.pyx",
-                  },
-                  disable_devicons = false,
+                show_scores = false,
+                show_unindexed = true,
+                ignore_patterns = {
+                    "*.git/*",
+                    "*/tmp/*",
+                    "*/__pycache__/*",
+                    "*.meta",
+                    "*.pyx",
+                },
+                disable_devicons = false,
             },
             live_grep_args = {
                 auto_quoting = true, -- enable/disable auto-quoting
@@ -544,7 +464,7 @@ function config.telescope()
             grep_string = fixfolds,
             live_grep = fixfolds,
             oldfiles = fixfolds,
-        }
+        },
     }
     require("telescope").setup(opts)
 
@@ -560,7 +480,6 @@ function config.telescope()
 end
 -- }}}
 
-
 -- {{{ telescope-tab
 function config.telescope_tabs()
     require("telescope-tabs").setup()
@@ -568,4 +487,3 @@ end
 --}}}
 
 return config
-

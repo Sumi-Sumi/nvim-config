@@ -1,9 +1,7 @@
 local debug = {}
 local conf = require("modules.debug.config")
 
-
 debug["mfussenegger/nvim-dap"] = {
-    opt = true,
     cmd = {
         "DapSetLogLevel",
         "DapShowLog",
@@ -15,16 +13,10 @@ debug["mfussenegger/nvim-dap"] = {
         "DapStepOut",
         "DapTerminate",
     },
-    module = "dap",
-    config = conf.dap
+    dependencies = {
+        { "rcarriga/nvim-dap-ui", config = conf.dapui },
+    },
+    config = conf.dap,
 }
-
-debug["rcarriga/nvim-dap-ui"] = {
-    opt = true,
-    after = "nvim-dap",
-    config = conf.dapui
-}
-
 
 return debug
-

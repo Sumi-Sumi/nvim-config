@@ -37,11 +37,12 @@ in
       withRuby = true;
 
       extraPackages = with pkgs; [
-        go
         cargo
-        ninja
+        deno
+        gcc
         gnumake
-        gcc # For nvim-treesitter
+        go
+        ninja
         patchelf
         sqlite
         yarn

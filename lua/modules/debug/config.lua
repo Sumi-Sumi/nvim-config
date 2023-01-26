@@ -2,12 +2,10 @@ local vim = vim
 local g, o, fn, api = vim.g, vim.o, vim.fn, vim.api
 local config = {}
 
-
 --{{{ dap
 function config.dap()
     local icons = { dap = require("modules.ui.icons").get("dap") }
 
-    vim.api.nvim_command([[packadd nvim-dap-ui]])
     local dap = require("dap")
     local dapui = require("dapui")
 
@@ -24,19 +22,10 @@ function config.dap()
     -- We need to override nvim-dap's default highlight groups, AFTER requiring nvim-dap for catppuccin.
     vim.api.nvim_set_hl(0, "DapStopped", { fg = "#ABE9B3" })
 
-    vim.fn.sign_define(
-        "DapBreakpoint",
-        { text = icons.dap.Breakpoint, texthl = "DapBreakpoint", linehl = "", numhl = "" }
-    )
-    vim.fn.sign_define(
-        "DapBreakpointCondition",
-        { text = icons.dap.BreakpointCondition, texthl = "DapBreakpoint", linehl = "", numhl = "" }
-    )
+    vim.fn.sign_define("DapBreakpoint", { text = icons.dap.Breakpoint, texthl = "DapBreakpoint", linehl = "", numhl = "" })
+    vim.fn.sign_define("DapBreakpointCondition", { text = icons.dap.BreakpointCondition, texthl = "DapBreakpoint", linehl = "", numhl = "" })
     vim.fn.sign_define("DapStopped", { text = icons.dap.Stopped, texthl = "DapStopped", linehl = "", numhl = "" })
-    vim.fn.sign_define(
-        "DapBreakpointRejected",
-        { text = icons.dap.BreakpointRejected, texthl = "DapBreakpoint", linehl = "", numhl = "" }
-    )
+    vim.fn.sign_define("DapBreakpointRejected", { text = icons.dap.BreakpointRejected, texthl = "DapBreakpoint", linehl = "", numhl = "" })
     vim.fn.sign_define("DapLogPoint", { text = icons.dap.LogPoint, texthl = "DapLogPoint", linehl = "", numhl = "" })
 
     dap.adapters.lldb = {
@@ -111,7 +100,6 @@ function config.dap()
 end
 -- }}}
 
-
 -- {{{ dapui
 function config.dapui()
     local icons = {
@@ -172,6 +160,5 @@ function config.dapui()
     require("dapui").setup(opts)
 end
 -- }}}
-
 
 return config

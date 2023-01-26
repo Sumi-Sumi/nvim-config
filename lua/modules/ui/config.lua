@@ -1,6 +1,5 @@
 local config = {}
 
-
 -- {{{ catppuccin
 function config.catppuccin()
     local opts = {
@@ -50,11 +49,11 @@ function config.catppuccin()
             neotree = {
                 enabled = true,
                 show_root = true,
-                transparent_panel = false
+                transparent_panel = false,
             },
             indent_blankline = {
                 enabled = true,
-                colored_indent_levels = false
+                colored_indent_levels = false,
             },
             aerial = false,
             barbar = false,
@@ -244,7 +243,6 @@ function config.catppuccin()
 end
 -- }}}
 
-
 -- {{{ onedark
 function config.onedark()
     local opts = {
@@ -269,14 +267,13 @@ function config.onedark()
         diagnostics = {
             darker = true,
             undercurl = true,
-            background = true
-        }
+            background = true,
+        },
     }
 
-    require('onedark').setup(opts)
+    require("onedark").setup(opts)
 end
 -- }}}
-
 
 -- {{{ alpha
 function config.alpha()
@@ -304,7 +301,6 @@ function config.alpha()
         [[⠀⠀⠀⠁⠀⠀⠀⠀⣼⣿⣿⣿⣷⡸⣷⣮⣿⣴⣿⣿⣿⣿⣿⣧⣠⣷⣿⣿⣿⠋⡀⣰⣿⡧⠀⠀⠀⠀⠀⠀ ]],
         [[⠀⠀⠀⠀⠀⠀⠀⢘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠿⠹⠿⠿⠛⣿⣿⣟⣥⡞⣴⣿⣿⣿⣶⠀⠀⠀⠀⠀ ]],
     }
-
     dashboard.section.header.opts.hl = "Type"
 
     local function button(sc, txt, leader_txt, keybind, keybind_opts)
@@ -352,7 +348,8 @@ function config.alpha()
     dashboard.section.buttons.opts.hl = "String"
 
     local function footer()
-        local total_plugins = #vim.tbl_keys(packer_plugins)
+        local stats = require("lazy").stats()
+        local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
         return "   Have Fun with neovim"
             .. "   v"
             .. vim.version().major
@@ -361,8 +358,10 @@ function config.alpha()
             .. "."
             .. vim.version().patch
             .. "   "
-            .. total_plugins
-            .. " plugins"
+            .. stats.count
+            .. " plugins in "
+            .. ms
+            .. "ms"
     end
 
     dashboard.section.footer.val = footer()
@@ -384,50 +383,49 @@ function config.alpha()
 
     alpha.setup(dashboard.opts)
 
+    vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyVimStarted",
+        callback = function()
+            dashboard.section.footer.val = footer()
+            pcall(vim.cmd.AlphaRedraw)
+        end,
+    })
 end
 -- }}}
-
 
 -- {{{ bufferline-nvim
 function config.bufferline_nvim()
     local icons = { ui = require("modules.ui.icons").get("ui") }
+
     local opts = {
         options = {
+            number = nil,
+            modified_icon = icons.ui.Modified,
             buffer_close_icon = icons.ui.Close,
             left_trunc_marker = icons.ui.Left,
-            modified_icon = icons.ui.Modified,
             right_trunc_marker = icons.ui.Right,
-            always_show_bufferline = true,
-            persist_buffer_sort = true,
-            show_buffer_close_icons = false,
-            show_buffer_icons = true,
-            show_close_icon = false,
-            show_duplicate_prefix = true,
-            show_tab_indicators = true,
-            max_name_length = 18,
-            max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
+            max_name_length = 14,
+            max_prefix_length = 13,
             tab_size = 20,
+            show_buffer_close_icons = true,
+            show_buffer_icons = true,
+            show_tab_indicators = true,
             diagnostics = "nvim_lsp",
-            number = "buffer_id",
+            always_show_bufferline = true,
             separator_style = "thin",
-            -- 'insert_after_current' |'insert_at_end' | 'id' | 'extension' | 'relative_directory' | 'directory' | 'tabs'
-            sort_by = "insert_after_current" ,
-            diagnostics_indicator = function(count, level, diagnostics_dict, context)
-                return "("..count..")"
-            end,
             offsets = {
                 {
                     filetype = "NvimNeoTree",
                     text = "File Explorer",
                     text_align = "center",
-                    padding = 1
+                    padding = 1,
                 },
                 {
                     filetyep = "undotree",
                     text = "Undo Tree",
                     text_align = "center",
                     highlight = "Directory",
-                    separator = true
+                    separator = true,
                 },
                 {
                     filetype = "lspsagaoutline",
@@ -436,12 +434,17 @@ function config.bufferline_nvim()
                     padding = 1,
                 },
             },
+            diagnostics_indicator = function(count)
+                return "(" .. count .. ")"
+            end,
         },
-        highlights = {}
+        -- Change bufferline's highlights here! See `:h bufferline-highlights` for detailed explanation.
+        -- Note: If you use catppuccin then modify the colors below!
+        highlights = {},
     }
 
     if vim.g.colors_name == "catppuccin" then
-        local cp = require("utils.color").get_palette()
+        local cp = require("utils.color").get_palette() -- Get the palette.
 
         local catppuccin_hl_overwrite = {
             highlights = require("catppuccin.groups.integrations.bufferline").get({
@@ -467,18 +470,16 @@ function config.bufferline_nvim()
 end
 -- }}}
 
-
 -- {{{ fidget
 function config.fidget()
     local opts = {
         window = {
-            blend = 0
-        }
+            blend = 0,
+        },
     }
     require("fidget").setup(opts)
 end
 -- }}}
-
 
 -- {{{ gitsigns
 function config.gitsigns()
@@ -517,34 +518,33 @@ function config.gitsigns()
                 linehl = "GitSignsChangeLn",
             },
         },
-        signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-        numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-        word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+        signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+        word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
         attach_to_untracked = true,
         current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
         watch_gitdir = {
-          interval = 1000,
-          follow_files = true
+            interval = 1000,
+            follow_files = true,
         },
         current_line_blame_opts = {
-          virt_text = true,
-          virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-          delay = 1000,
-          ignore_whitespace = false,
+            virt_text = true,
+            virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
+            delay = 1000,
+            ignore_whitespace = false,
         },
-        current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+        current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
         on_attach = function()
             local gs = package.loaded.gitsigns
             km.gitsigns(gs)
-        end
+        end,
     }
 
     require("gitsigns").setup(opts)
     require("scrollbar.handlers.gitsigns").setup()
 end
 -- }}}
-
 
 -- {{{ indent-blackline
 function config.indent_blankline()
@@ -574,7 +574,7 @@ function config.indent_blankline()
         },
         buftype_exclude = {
             "terminal",
-            "nofile"
+            "nofile",
         },
         show_trailing_blankline_indent = false,
         context_patterns = {
@@ -597,13 +597,12 @@ function config.indent_blankline()
             "var",
             "while",
             "with",
-        }
+        },
     }
 
     require("indent_blankline").setup(opts)
 end
 -- }}}
-
 
 -- {{{ lualine
 function config.lualine()
@@ -614,7 +613,7 @@ function config.lualine()
     }
 
     local function escape_status()
-        local ok, m =  pcall(require, "better_escape")
+        local ok, m = pcall(require, "better_escape")
         return ok and m.waiting and icons.misc.EscapeST or ""
     end
 
@@ -706,12 +705,12 @@ function config.lualine()
 
     local outline = {
         section = mini_sections,
-        filetypes = { "lspsagaoutline" }
+        filetypes = { "lspsagaoutline" },
     }
 
     local diffview = {
         sections = mini_sections,
-        filetypes = { "DiffviewFiles" }
+        filetypes = { "DiffviewFiles" },
     }
 
     local opts = {
@@ -720,9 +719,8 @@ function config.lualine()
             theme = "nord",
             component_separators = "|",
             -- section_separators = { left = "", right = ""},
-            disabled_filetypes = {
-            },
-          },
+            disabled_filetypes = {},
+        },
         sections = {
             lualine_a = { { "mode" } },
             lualine_b = { { get_cmd } },
@@ -736,14 +734,14 @@ function config.lualine()
                         error = icons.diagnostics.Error,
                         warn = icons.diagnostics.Warning,
                         info = icons.diagnostics.Information,
-                    }
+                    },
                 },
             },
             lualine_y = {
                 {
                     "filetype",
                     colored = true,
-                    icon_only = true
+                    icon_only = true,
                 },
                 { python_venv },
                 { nix_env },
@@ -754,19 +752,19 @@ function config.lualine()
                     symbols = {
                         unix = "LF",
                         dos = "CRLF",
-                        mac = "CR"
-                    }
-                }
+                        mac = "CR",
+                    },
+                },
             },
-            lualine_z = { "progress", "location" }
+            lualine_z = { "progress", "location" },
         },
         inactive_sections = {
-            lualine_a = { { lspsaga_symbols }},
+            lualine_a = { { lspsaga_symbols } },
             lualine_b = {},
             lualine_c = { "filename" },
             lualine_x = { "location" },
             lualine_y = {},
-            lualine_z = {}
+            lualine_z = {},
         },
         winbar = {
             lualine_a = { { lspsaga_symbols } },
@@ -774,7 +772,7 @@ function config.lualine()
             lualine_c = {},
             lualine_x = {},
             lualine_y = {},
-            lualine_z = {}
+            lualine_z = {},
         },
         extensions = {
             "fugitive",
@@ -783,25 +781,23 @@ function config.lualine()
             "quickfix",
             "toggleterm",
             outline,
-            diffview
-        }
+            diffview,
+        },
     }
 
     require("lualine").setup(opts)
 end
 -- }}}
 
-
 -- {{{ nvim-hlslens
 function config.nvim_hlslens()
     local opts = {
         auto_enable = true,
-        float_shadow_blend = 60
+        float_shadow_blend = 60,
     }
     require("scrollbar.handlers.search").setup(opts)
 end
 -- }}}
-
 
 -- {{{ nvim-scrollbar
 function config.nvim_scrollbar()
@@ -833,18 +829,17 @@ function config.nvim_scrollbar()
             Info = { color = get_color("blue2"), text = text },
             Hint = { color = get_color("teal"), text = text },
             Misc = { color = get_color("purple"), text = text },
-        }
+        },
     }
     require("scrollbar").setup(opts)
 end
 -- }}}
 
-
 -- {{{ nvim-notify
 function config.notify()
     local icons = {
         diagnostics = require("modules.ui.icons").get("diagnostics"),
-        ui = require("modules.ui.icons").get("ui")
+        ui = require("modules.ui.icons").get("ui"),
     }
 
     local opts = {
@@ -858,7 +853,7 @@ function config.notify()
             INFO = icons.diagnostics.Infomation,
             DEBUG = icons.ui.Bug,
             TRACE = icons.ui.Pencil,
-        }
+        },
     }
     local notify = require("notify")
     notify.setup(opts)
@@ -866,6 +861,4 @@ function config.notify()
 end
 -- }}}
 
-
 return config
-

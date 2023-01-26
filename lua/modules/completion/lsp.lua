@@ -1,10 +1,6 @@
 local is_linux = require("core.global").is_linux
 local formatting = require("modules.completion.formatting")
 
-vim.api.nvim_command([[packadd lsp_signature.nvim]])
-vim.api.nvim_command([[packadd lspsaga.nvim]])
-vim.api.nvim_command([[packadd cmp-nvim-lsp]])
-
 local nvim_lsp = require("lspconfig")
 local mason = require("mason")
 local mason_lsp = require("mason-lspconfig")
@@ -75,7 +71,9 @@ local function custom_attach(client, bufnr)
         fix_pos = true,
         hint_enable = true,
         hi_parameter = "Search",
-        handler_opts = { "double" },
+        handler_opts = {
+            border = "rounded",
+        },
     })
 end
 
@@ -125,10 +123,10 @@ local configs = {
     --                 onSave = false,
     --             },
     --             chktex = {
-    --                 onEdit = true,
+    --                 onEdit = false,
     --                 onOpenAndSave = false,
     --             },
-    --             diagnosticsDelay = 100,
+    --             diagnosticsDelay = 200,
     --             formatterLineLength = 120,
     --             forwardSearch = {
     --                 args = {},
@@ -297,12 +295,6 @@ mason_lsp.setup({
 })
 for _, server in ipairs(mason_lsp.get_installed_servers()) do
     nvim_lsp[server].setup(configs[server])
-    -- elseif server ~= "efm" then
-    --     nvim_lsp[server].setup({
-    --         capabilities = capabilities,
-    --         on_attach = custom_attach,
-    --     })
-    -- end
 end
 -- }}}
 

@@ -2,29 +2,25 @@ local lang = {}
 local conf = require("modules.lang.config")
 
 lang["chrisbra/csv.vim"] = {
-    opt = true,
     ft = "csv",
 }
 
 lang["akinsho/flutter-tools.nvim"] = {
-    opt = true,
-    requires = {
-        { "nvim-lua/plenary.nvim", opt = false },
+    dependencies = {
+        { "nvim-lua/plenary.nvim" },
     },
     ft = "dart",
     config = conf.flutter_tools,
 }
 
 lang["iamcco/markdown-preview.nvim"] = {
-    opt = true,
-    run = "cd app && npm install",
-    config = conf.md_preview,
+    build = "cd app && npm install",
     ft = { "markdown" },
+    config = conf.md_preview,
 }
 
 lang["simrat39/rust-tools.nvim"] = {
-    opt = true,
-    requires = {
+    dependencies = {
         { "nvim-lua/plenary.nvim", opt = false },
     },
     ft = "rust",
@@ -32,14 +28,12 @@ lang["simrat39/rust-tools.nvim"] = {
 }
 
 lang["fatih/vim-go"] = {
-    opt = true,
     ft = "go",
     -- event = "GoInstallBinaries",
     config = conf.vim_go,
 }
 
 lang["lervag/vimtex"] = {
-    opt = true,
     ft = "tex",
     config = conf.vimtex,
 }

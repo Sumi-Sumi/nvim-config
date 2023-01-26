@@ -30,9 +30,6 @@ end
 
 -- {{{ rust-tools
 function config.rust_tools()
-    vim.api.nvim_command([[packadd nvim-lspconfig]])
-    vim.api.nvim_command([[packadd lsp_signature.nvim]])
-
     local opts = {
         tools = { -- rust-tools options
 

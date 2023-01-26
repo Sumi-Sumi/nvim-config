@@ -1,35 +1,25 @@
 local tools = {}
 local conf = require("modules.tools.config")
 
-
 -- CodePallet
 tools["mrjones2014/legendary.nvim"] = {
-    opt = true,
-    requires = {
-        {
-            "stevearc/dressing.nvim",
-            opt = true,
-            config = conf.dressing },
-        { "kkharji/sqlite.lua", opt = true },
-        { "folke/which-key.nvim", opt = false }
+    dependencies = {
+        { "kkharji/sqlite.lua" },
+        { "stevearc/dressing.nvim", event = "VeryLazy", config = conf.dressing },
+        -- Please don't remove which-key.nvim otherwise you need to set timeoutlen=300 at `lua/core/lazyions.lua`
+        { "folke/which-key.nvim", event = "VeryLazy", config = conf.which_key },
     },
     cmd = "Legendary",
-    config = conf.legendary
+    config = conf.legendary,
 }
 
-tools["nvim-lua/plenary.nvim"] = { opt=false }
-
-tools["nvim-tree/nvim-web-devicons"] = { opt=false }
-
-tools["MunifTanjim/nui.nvim"]={ opt=false }
-
 tools["nvim-neo-tree/neo-tree.nvim"] = {
-    opt = true,
     branch = "v2.x",
-    requires = {
-        { "nvim-lua/plenary.nvim", opt=false },
-        { "nvim-tree/nvim-web-devicons", opt=false },
-        { "MunifTanjim/nui.nvim", opt=false },
+    dependencies = {
+        { "nvim-lua/plenary.nvim" },
+        { "nvim-tree/nvim-web-devicons" },
+        { "MunifTanjim/nui.nvim" },
+        { "s1n7ax/nvim-window-picker", config = conf.window_picker },
     },
     cmd = {
         "Neotree",
@@ -38,146 +28,86 @@ tools["nvim-neo-tree/neo-tree.nvim"] = {
         "NeoTreeShowInSplit",
         "NeoTreeShowInSplitToggle",
     },
-    event = "BufReadPost",
-    config = conf.neo_tree
+    -- event = "BufReadPost",
+    config = conf.neo_tree,
 }
-
--- For neo-tree
-tools["s1n7ax/nvim-window-picker"] = {
-    opt=true,
-    after = "neo-tree.nvim",
-    config = conf.window_picker,
-}
-
 
 -- Codeの部分実行
 tools["michaelb/sniprun"] = {
-    opt = true,
-    run = "bash ./install.sh",
-    cmd = {
-        "SnipRun",
-        "<,'>SnipRun",
-        "SnipInfo"
-    },
-    config = conf.sniprun
+    build = "bash ./install.sh",
+    cmd = { "SnipRun" },
+    config = conf.sniprun,
 }
 
 -- Show trouble
 tools["folke/trouble.nvim"] = {
-    opt = true,
     cmd = { "Trouble", "TroubleToggle", "TroubleRefresh" },
     config = conf.trouble,
 }
 
 tools["mbbill/undotree"] = {
-    opt = true,
     cmd = "UndotreeToggle",
-    config = conf.undotree
-}
-tools["Shougo/vimproc.vim"] = {
-    opt = true,
-    run = "make",
-    after = "vim-quickrun"
+    config = conf.undotree,
 }
 
 tools["thinca/vim-quickrun"] = {
-    opt = true,
     cmd = "QuickRun",
-    -- config = conf.vimproc
+    dependencies = {
+        { "Shougo/vimproc.vim", build = "make" },
+    },
 }
 
 tools["dstein64/vim-startuptime"] = {
-    opt = true,
-    cmd = "StartupTime"
+    cmd = "StartupTime",
 }
 
 tools["folke/which-key.nvim"] = {
-    opt = false,
-    config = conf.which_key
+    lazy = false,
+    config = conf.which_key,
 }
 
 tools["gelguy/wilder.nvim"] = {
     event = "CmdlineEnter",
-    requires = { { "romgrk/fzy-lua-native", after = "wilder.nvim" } },
-    config = conf.wilder
+    dependencies = { { "romgrk/fzy-lua-native" } },
+    config = conf.wilder,
 }
 
 tools["akinsho/toggleterm.nvim"] = {
-    opt = true,
     -- cmd = "ToggleTerm",
     event = "UIEnter",
-    config = conf.toggleterm
+    config = conf.toggleterm,
 }
 
 tools["nvim-telescope/telescope.nvim"] = {
-    opt = true,
-    requires = {
-        { "nvim-lua/plenary.nvim", opt = false },
-        { "nvim-lua/popup.nvim", opt = true }
-    },
-    module = "telescope",
-    cmd = {
-        "Telescope"
-    },
-    config = conf.telescope
-}
-
-tools["dhruvmanila/telescope-bookmarks.nvim"] = {
-    opt = true,
-}
-
-tools["sudormrfbin/cheatsheet.nvim"] = {
-    opt = true,
-    cmd = "Cheatsheet"
-}
-
-tools["nvim-telescope/telescope-frecency.nvim"] = {
-    opt = true,
-    requires = {
+    dependencies = {
+        { "nvim-lua/plenary.nvim" },
+        { "nvim-lua/popup.nvim" },
+        { "nvim-tree/nvim-web-devicons" },
+        { "dhruvmanila/telescope-bookmarks.nvim" },
+        { "sudormrfbin/cheatsheet.nvim", cmd = "Cheatsheet" },
         {
-            "kkharji/sqlite.lua",
-            opt = true
+            "nvim-telescope/telescope-frecency.nvim",
+            dependencies = {
+                { "kkharji/sqlite.lua" },
+                { "nvim-tree/nvim-web-devicons" },
+            },
         },
-        {
-            "nvim-tree/nvim-web-devicons",
-            opt = true,
-        }
-    }
-}
+        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+        { "nvim-telescope/telescope-live-grep-args.nvim" },
+        { "nvim-telescope/telescope-media-files.nvim" },
+        { "barrett-ruth/telescope-http.nvim" },
+        { "nvim-telescope/telescope-project.nvim" },
+        { "LukasPietzschmann/telescope-tabs", config = conf.telescope_tabs },
+        { "chip/telescope-software-licenses.nvim" },
+        { "jvgrootveld/telescope-zoxide" },
 
-tools["nvim-telescope/telescope-fzf-native.nvim"] = {
-    opt = true,
-    run = "make"
-}
-
-tools["nvim-telescope/telescope-live-grep-args.nvim"] = {
-    opt = true,
-}
-
-tools["nvim-telescope/telescope-media-files.nvim"] = {
-    opt = true,
-}
-
-tools["barrett-ruth/telescope-http.nvim"] = {
-    opt = true,
-}
-
-tools["nvim-telescope/telescope-project.nvim"] = {
-    opt = true,
-}
-
-tools["LukasPietzschmann/telescope-tabs"] = {
-    after = "telescope.nvim",
-    config = conf.telescope_tabs
-}
-
-tools["chip/telescope-software-licenses.nvim"] = {
-    opt = true,
-}
-
-tools["jvgrootveld/telescope-zoxide"] = {
-    opt = true
+        { "debugloop/telescope-undo.nvim" },
+        -- { "ahmedkhalf/project.nvim", event = "BufReadPost", config = conf.project },
+    },
+    cmd = {
+        "Telescope",
+    },
+    config = conf.telescope,
 }
 
 return tools
-

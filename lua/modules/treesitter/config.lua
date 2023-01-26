@@ -1,14 +1,13 @@
 local config = {}
-local use_ssh = require("pack_utils.settings").use_ssh
-
+local use_ssh = require("core.settings").use_ssh
 
 -- {{{ vim-illuminate
 function config.vim_illuminate()
     local opts = {
         providers = {
-            'lsp',
-            'treesitter',
-            'regex',
+            "lsp",
+            "treesitter",
+            "regex",
         },
         delay = 100,
         -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
@@ -22,15 +21,14 @@ function config.vim_illuminate()
             "NeoTree",
             "Outline",
             "packer",
-            "toggleterm"
+            "toggleterm",
         },
         under_cursor = false,
-        }
+    }
 
     require("illuminate").configure(opts)
 end
 -- }}}
-
 
 -- {{{ neodim
 function config.neodim()
@@ -46,20 +44,18 @@ function config.neodim()
             virtual_text = true,
             signs = false,
             underline = false,
-        }
+        },
     }
 
     require("neodim").setup(opts)
 end
 -- }}}
 
-
 -- {{{ nvim-colorizer
 function config.nvim_colorizer()
     require("colorizer").setup()
 end
 -- }}}
-
 
 -- {{{ nvim-treesitter
 function config.nvim_treesitter()
@@ -97,19 +93,19 @@ function config.nvim_treesitter()
         },
         context_commentstring = {
             enable = true,
-            enable_autocmd = true
+            enable_autocmd = true,
         },
         highlight = {
             enable = true,
             disable = {
-                "vim"
+                "vim",
             },
             additional_vim_regex_highlighting = false,
         },
         textobject = {
             select = {
                 enable = true,
-                keymaps = km.textobject.select
+                keymaps = km.textobject.select,
             },
             move = {
                 enable = true,
@@ -118,7 +114,7 @@ function config.nvim_treesitter()
                 goto_next_end = km.textobject.move.goto_next_end,
                 goto_previous_start = km.textobject.move.goto_previous_start,
                 goto_previous_end = km.textobject.move.goto_previous_end,
-            }
+            },
         },
         rainbow = {
             enable = true,
@@ -126,8 +122,8 @@ function config.nvim_treesitter()
             max_file_lines = 2000,
         },
         matchup = {
-            enable = true
-        }
+            enable = true,
+        },
     }
 
     require("nvim-treesitter.configs").setup(opts)
@@ -141,6 +137,4 @@ function config.nvim_treesitter()
 end
 -- }}}
 
-
 return config
-
