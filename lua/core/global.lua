@@ -9,8 +9,8 @@ function global:load_variables()
     self.vim_path = vim.fn.stdpath("config")
     self.cache_dir = utils.joinpath(home, ".cache", "nvim")
     self.data_dir = utils.joinpath(vim.fn.stdpath("data"), "site")
-    self.modules_dir = utils.joinpath(self.vim_path, "lua", "modules")
     self.state_dir = vim.fn.stdpath("state")
+    self.modules_dir = utils.joinpath(self.vim_path, "lua", "modules")
     self.home = home
 end
 

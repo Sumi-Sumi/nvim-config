@@ -135,11 +135,9 @@ end
 
 
 local load_core = function()
-    local pack = require("pack_utils")
     createdir()
     disable_distribution_plugins()
 
-    pack.ensure_plugins()
     neovide_config()
     clipboard_config()
 
@@ -150,7 +148,7 @@ local load_core = function()
     require("core.keymap")
     require("core.filetype")
     require("core.event")
-    pack.load_compile()
+    require("core.lazy")
     require("modules.keymap")
 
     -- vim.api.nvim_command([[set background=light]])

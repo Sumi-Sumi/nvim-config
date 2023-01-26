@@ -1,5 +1,4 @@
 local uv, opt = vim.loop, vim.opt
-local o = vim.o
 local global = require("core.global")
 local utils = require("utils")
 
