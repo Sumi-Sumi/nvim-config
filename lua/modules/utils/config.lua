@@ -215,6 +215,7 @@ function config.skkeleton()
         showCandidatesCount = 0,
         skkServerReqEnc = "utf-8",
         skkServerResEnc = "utf-8",
+        immediatelyCancel = false,
         useSkkServer = false,
         userJisyo = utils.joinpath(global.state_dir, "skkeleton"),
     }
