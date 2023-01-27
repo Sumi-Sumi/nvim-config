@@ -41,10 +41,13 @@ function autocmd.load_autocmds()
                 [[if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif]],
             },
             -- Auto toggle fcitx5
-            -- {"InsertLeave", "* :silent", "!fcitx5-remote -c"},
+            { "InsertLeave", "* :silent", "!fcitx5-remote -g EN" },
+            { "InsertEnter", "* :silent", "!fcitx5-remote -g EN" },
+            { "FocusGained", "* :silent", "!fcitx5-remote -g EN" },
+            { "FocusLost", "* :silent", "!fcitx5-remote -g skk" },
+            { "QuitPre", "*", ":silent !fcitx5-remote -g skk " },
             -- {"BufCreate", "*", ":silent !fcitx5-remote -c"},
             -- {"BufEnter", "*", ":silent !fcitx5-remote -c "},
-            -- {"BufLeave", "*", ":silent !fcitx5-remote -c "}
         },
         wins = {
             -- Highlight current line only on focused window
@@ -96,42 +99,5 @@ function autocmd.load_autocmds()
 
     autocmd.nvim_create_augroups(definitions)
 end
--- function autocmd.load_autocmds()
---     local definitions = {
---         packer = {},
---         bufs = {
---             { "BufWritePre", "/tmp/*", "setlocal noundofile" },
---             { "BufWritePre", "COMMIT_EDITMSG", "setlocal noundofile" },
---             { "BufWritePre", "MERGE_MSG", "setlocal noundofile" },
---             { "BufWritePre", "*.tmp", "setlocal noundofile" },
---             { "BufWritePre", "*.bak", "setlocal noundofile" },
---             { "BufWritePost", "$MYVIMRC", "luafile $MYVIMRC" },
---
---             -- Auto toggle fcitx5
---             { "InsertLeave", "*", ":silent !fcitx5-remote -c" },
---             { "BufCreate", "*", ":silent !fcitx5-remote -c" },
---             { "BufEnter", "*", ":silent !fcitx5-remote -c " },
---             { "BufLeave", "*", ":silent !fcitx5-remote -c " },
---             -- folding
---             { "BufWinLeave", "*", ":mkview" },
---             { "BufWinEnter", "*", ":silent", "loadview" },
---         },
---
---         wins = {
---             -- -- tmuxとneovimのfocus・unfocusを視覚的にわかりやすくする
---             -- { "WinEnter", "*", ("highlight Normal guibg=%06x"):format(vim.api.nvim_get_hl_by_name("Normal", true).background) },
---             -- { "WinEnter", "*", ("highlight NormalNc guibg=%06x"):format(vim.api.nvim_get_color_by_name("Black")) },
---             -- { "FocusGained", "*", ("highlight Normal guibg=%06x"):format(vim.api.nvim_get_hl_by_name("Normal", true).background) },
---             -- { "FocusLost", "*", ("highlight Normal guibg=%06x"):format(vim.api.nvim_get_color_by_name("Black")) },
---             -- -- nvimを開いているウィンドウの大きさが変更されたとき各ウィンドウの大きさを均等にする
---             -- { "VimResized", "*", [[tabdo wincmd =]] },
---         },
---
---         ft = {
---         }
---     }
---
---     autocmd.nvim_create_augroups(definitions)
--- end
 
 autocmd.load_autocmds()

@@ -3,24 +3,33 @@ local map_cr, map_cu, map_cmd = bind.map_cr, bind.map_cu, bind.map_cmd
 
 local lazy_keymap = {}
 
-
--- ui
+-- {{{ gitsigns
 function lazy_keymap.gitsigns(gs)
     local keymap = {
-        ["n|]c"] = map_cmd(
-            function()
-                if vim.wo.diff then return "]c" end
-                vim.schedule(function() gs.next_hunk() end)
+        ["n|]c"] = map_cmd(function()
+                if vim.wo.diff then
+                    return "]c"
+                end
+                vim.schedule(function()
+                    gs.next_hunk()
+                end)
                 return "<Ignore>"
-            end
-        ):with_expr():with_buffer():with_desc("Gitsigns prev hunk"),
-        ["n|[c"] = map_cmd(
-            function()
-                if vim.wo.diff then return "[c" end
-                vim.schedule(function() gs.prev_hunk() end)
+            end)
+            :with_expr()
+            :with_buffer()
+            :with_desc("Gitsigns prev hunk"),
+        ["n|[c"] = map_cmd(function()
+                if vim.wo.diff then
+                    return "[c"
+                end
+                vim.schedule(function()
+                    gs.prev_hunk()
+                end)
                 return "<Ignore>"
-            end
-        ):with_expr():with_buffer():with_desc("Gitsigns prev hunk"),
+            end)
+            :with_expr()
+            :with_buffer()
+            :with_desc("Gitsigns prev hunk"),
         -- Actions
         ["n,v|<leader>hs"] = map_cr("Gitsigns stage_hunk"):with_buffer(),
         ["n,v|<leader>hr"] = map_cr("Gitsigns reset_hunk"):with_buffer(),
@@ -28,17 +37,26 @@ function lazy_keymap.gitsigns(gs)
         ["n|<leader>hu"] = map_cmd(gs.undo_stage_hunk):with_buffer():with_desc("Gitsigns undo stage hunk"),
         ["n|<leader>hR"] = map_cmd(gs.reset_buffer):with_buffer():with_desc("Gitsigns reset buffer"),
         ["n|<leader>hp"] = map_cmd(gs.preview_hunk):with_buffer():with_desc("Gitsigns preview hunk"),
-        ["n|<leader>hb"] = map_cmd(function() gs.blame_line{ full=true } end):with_buffer():with_desc("Gitsigns blame line"),
+        ["n|<leader>hb"] = map_cmd(function()
+                gs.blame_line({ full = true })
+            end)
+            :with_buffer()
+            :with_desc("Gitsigns blame line"),
         ["n|<leader>tb"] = map_cmd(gs.toggle_current_line_blame):with_buffer():with_desc("Gitsigns blame current line"),
         ["n|<leader>hd"] = map_cmd(gs.diffthis):with_desc("Gitsigns diffthis"),
-        ["n|<leader>hD"] = map_cmd(function() gs.diffthis("~") end):with_buffer():with_desc("Gitsigns diffthis ~"),
+        ["n|<leader>hD"] = map_cmd(function()
+                gs.diffthis("~")
+            end)
+            :with_buffer()
+            :with_desc("Gitsigns diffthis ~"),
         ["n|<leader>sgd"] = map_cmd(gs.toggle_deleted):with_buffer():with_desc("Gitsigns toggle delete"),
         ["o,x|ih"] = map_cr(":Gitsigns select_hunk"),
     }
     bind.nvim_load_mapping(keymap)
 end
+-- }}}
 
--- tools
+-- {{{ NeoTree
 function lazy_keymap.neo_tree()
     local keymap = {
         window = {
@@ -62,17 +80,17 @@ function lazy_keymap.neo_tree()
             ["z"] = "close_all_nodes",
             -- ["Z"] = "expand_all_nodes",
             ["n"] = {
-              "add",
-              -- some commands may take optional config options, see `:h neo-tree-mappings` for details
-              config = {
-                show_path = "relative"
-              }
+                "add",
+                -- some commands may take optional config options, see `:h neo-tree-mappings` for details
+                config = {
+                    show_path = "relative",
+                },
             },
             ["N"] = {
                 "add_directory",
                 config = {
-                    show_path = "relative"
-                }
+                    show_path = "relative",
+                },
             },
             ["dd"] = "delete",
             ["r"] = "rename",
@@ -83,14 +101,14 @@ function lazy_keymap.neo_tree()
             ["c"] = {
                 "copy",
                 config = {
-                    show_path = "relative"
-                }
+                    show_path = "relative",
+                },
             },
             ["m"] = {
                 "move",
                 config = {
-                    show_path = "relative"
-                }
+                    show_path = "relative",
+                },
             },
             ["q"] = "close_window",
             ["R"] = "refresh",
@@ -117,20 +135,21 @@ function lazy_keymap.neo_tree()
             ["."] = "set_root",
         },
         git = {
-            ["gA"]  = "git_add_all",
+            ["gA"] = "git_add_all",
             ["ga"] = "git_add_file",
             ["gc"] = "git_commit",
             ["gg"] = "git_commit_and_push",
             ["gp"] = "git_push",
             ["gr"] = "git_revert_file",
             ["gu"] = "git_unstage_file",
-        }
+        },
     }
 
     return keymap
 end
+-- }}}
 
-
+-- {{{ trouble
 function lazy_keymap.trouble()
     local keymap = {
         -- map to {} to remove a mapping, for example:
@@ -138,26 +157,27 @@ function lazy_keymap.trouble()
         close = "q", -- close the list
         cancel = { "<esc>", "jj" }, -- cancel the preview and get back to your last window / buffer / cursor
         refresh = "R", -- manually refresh
-        jump = {"<cr>", "<tab>"}, -- jump to the diagnostic or open / close folds
+        jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
         open_split = { "<c-s>" }, -- open buffer in new split
         open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
         open_tab = { "<c-t>" }, -- open buffer in new tab
-        jump_close = {"o"}, -- jump to the diagnostic and close the list
+        jump_close = { "o" }, -- jump to the diagnostic and close the list
         toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
         toggle_preview = "P", -- toggle auto_preview
         hover = "K", -- opens a small popup with the full multiline message
         preview = "p", -- preview the diagnostic location
-        close_folds = {"zM", "zm"}, -- close all folds
-        open_folds = {"zR", "zr"}, -- open all folds
-        toggle_fold = {"zA", "za"}, -- toggle fold of current file
+        close_folds = { "zM", "zm" }, -- close all folds
+        open_folds = { "zR", "zr" }, -- open all folds
+        toggle_fold = { "zA", "za" }, -- toggle fold of current file
         previous = "k", -- previous item
-        next = "j" -- next item
+        next = "j", -- next item
     }
 
     return keymap
 end
+-- }}}
 
-
+-- {{{ legendary
 function lazy_keymap.legendary()
     local keymap = {
         ["<leader>"] = {
@@ -260,8 +280,9 @@ function lazy_keymap.legendary()
 
     return keymap
 end
+-- }}}
 
-
+-- {{{ Telescope live_grep_args
 function lazy_keymap.live_grep_args(lga_actions)
     local keymap = {
         i = {
@@ -272,7 +293,9 @@ function lazy_keymap.live_grep_args(lga_actions)
 
     return keymap
 end
+-- }}}
 
+-- {{{ Telescope textobject
 function lazy_keymap.textobject()
     local keymap = {
         select = {
@@ -298,20 +321,17 @@ function lazy_keymap.textobject()
                 ["[]"] = "@function.outer",
                 ["[M"] = "@class.outer",
             },
-        }
+        },
     }
 
     return keymap
 end
+-- }}}
 
+-- {{{ nvim-cmp
 function lazy_keymap.nvim_cmp(cmp)
     local t = function(str)
         return vim.api.nvim_replace_termcodes(str, true, true, true)
-    end
-
-    local has_words_before = function()
-        local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
     end
 
     local keymap = {
@@ -326,8 +346,6 @@ function lazy_keymap.nvim_cmp(cmp)
                 cmp.select_next_item()
             elseif require("luasnip").expand_or_jumpable() then
                 vim.fn.feedkeys(t("<Plug>luasnip-expand-or-jump"), "")
-            elseif has_words_before() then
-                cmp.complete()
             else
                 fallback()
             end
@@ -345,5 +363,6 @@ function lazy_keymap.nvim_cmp(cmp)
 
     return keymap
 end
+-- }}}
 
 return lazy_keymap

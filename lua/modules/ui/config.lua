@@ -723,8 +723,8 @@ function config.lualine()
         },
         sections = {
             lualine_a = { { "mode" } },
-            lualine_b = { { get_cmd } },
-            lualine_c = { { "branch" }, { "diff", source = diff_source } },
+            lualine_b = { { "branch" }, { "diff", source = diff_source } },
+            lualine_c = { { get_cmd } },
             lualine_x = {
                 { escape_status },
                 {

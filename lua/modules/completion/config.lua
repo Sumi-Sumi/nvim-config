@@ -246,40 +246,29 @@ function config.cmp()
                     mode = "symbol_text",
                     maxwidth = 50,
                     symbol_map = vim.tbl_deep_extend("force", icons.kind, icons.type, icons.cmp),
+                    menu = {
+                        nvim_lsp = " [LSP]",
+                        nvim_lua = " [LUA]",
+                        path = " [PATH]",
+                        spell = " [SPELL]",
+                        tmux = " [TMUX]",
+                        orgmode = " [ORGMODE]",
+                        buffer = " [BUFFER]",
+                        latex_symbols = " [LATEX]",
+                        copilot = " [COPILOT]",
+                    },
                 })(entry, vim_item)
                 local strings = vim.split(kind.kind, "%s", { trimempty = true })
-                kind.kind = " " .. strings[1] .. " "
-                kind.menu = "    (" .. strings[2] .. ")"
+                -- kind.kind = " " .. strings[1] .. " "
+                -- kind.menu = "    (" .. strings[2] .. ")"
+                kind.kind = " " .. strings[1] .. " (" .. strings[2]:sub(0, 4) .. "): "
+                -- kind.menu = " [" .. menu[entry.source.name] .. "]"
+
                 return kind
             end,
         },
         -- You can set mappings if you want
-        mapping = cmp.mapping.preset.insert({
-            ["<CR>"] = cmp.mapping.confirm({ select = true }),
-            ["<C-p>"] = cmp.mapping.select_prev_item(),
-            ["<C-n>"] = cmp.mapping.select_next_item(),
-            ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-            ["<C-f>"] = cmp.mapping.scroll_docs(4),
-            ["<C-e>"] = cmp.mapping.close(),
-            ["<Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item()
-                elseif require("luasnip").expand_or_jumpable() then
-                    vim.fn.feedkeys(t("<Plug>luasnip-expand-or-jump"), "")
-                else
-                    fallback()
-                end
-            end, { "i", "s" }),
-            ["<S-Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item()
-                elseif require("luasnip").jumpable(-1) then
-                    vim.fn.feedkeys(t("<Plug>luasnip-jump-prev"), "")
-                else
-                    fallback()
-                end
-            end, { "i", "s" }),
-        }),
+        mapping = km.cmp,
         snippet = {
             expand = function(args)
                 require("luasnip").lsp_expand(args.body)
@@ -298,6 +287,7 @@ function config.cmp()
             { name = "buffer" },
             { name = "latex_symbols" },
             { name = "copilot" },
+            -- { name = "skkeleton", view = { entries = "native" }, max_item_count = 8 },
             -- { name = "cmp_tabnine" },
         },
     }

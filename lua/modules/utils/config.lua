@@ -179,6 +179,9 @@ end
 
 -- {{{ skkeleton
 function config.skkeleton()
+    local global = require("core.global")
+    local utils = require("utils")
+    local fcitx_config_path = utils.joinpath(global.home, ".local", "share", "fcitx5")
     local function file_exists(file)
         local f = io.open(file, "rb")
         if f then
@@ -196,22 +199,46 @@ function config.skkeleton()
         local lines = {}
         for line in io.lines(file) do
             if string.find(line, "server") == nil then
-                lines[#lines + 1] = line
+                if string.find(line, "FCITX_CONFIG_DIR") == nil then
+                    lines[#lines + 1] = vim.split(line, ",", { trimempty = true })[1]:sub(6, -1)
+                else
+                    lines[#lines + 1] = vim.split(line, ",", { trimempty = true })[1]:sub(6, -1):gsub("$FCITX_CONFIG_DIR", fcitx_config_path)
+                end
             end
         end
         return lines
     end
-    local global = require("core.global")
-    local utils = require("utils")
     local dict_path = utils.joinpath(global.home, ".local", "share", "fcitx5", "skk", "dictionary_list")
-    vim.g.globalDictionaries = lines_from(dict_path)
-    vim.g.globalJisyoEncoding = "utf-8"
-    vim.g.showCandidatesCount = 0
-    vim.g.skkServerReqEnc = "utf-8"
-    vim.g.skkServerResEnc = "utf-8"
-    vim.g.useSkkServer = false
-    vim.g.userJisyo = global.state_dir
-    -- vim.fn["skkeleton#register_keymap"]()
+    local opts = {
+        globalDictionaries = lines_from(dict_path),
+        globalJisyoEncoding = "utf-8",
+        showCandidatesCount = 0,
+        skkServerReqEnc = "utf-8",
+        skkServerResEnc = "utf-8",
+        useSkkServer = false,
+        userJisyo = utils.joinpath(global.state_dir, "skkeleton"),
+    }
+    vim.fn["skkeleton#config"](opts)
+    local keymaps = {
+        { "<C-g>", "", "input" },
+        { "<C-g>", "", "henkan" },
+        { "<C-q>", "", "input" },
+        { "<C-q>", "", "henkan" },
+        { "<C-Space>", "", "input" },
+        { "<C-Space>", "", "henkan" },
+        { "<C-j>", "cancel", "input" },
+        { "<C-j>", "kakutei", "henkan" },
+        { "q", "katakana", "input" },
+        { "<C-q>", "hankatakana", "input" },
+        { "<C-x>", "cancel", "henkan" },
+        { "<C-x>", "purgeCandidate", "input" },
+        { "L", "hankatakana", "input" },
+    }
+    -- vim.fn.add(vim.fn["skkeleton#get_default_mapped_keys"](), mapkeys)
+
+    for _, t in ipairs(keymaps) do
+        vim.fn["skkeleton#register_keymap"](t[3], t[1], t[2])
+    end
 end
 -- }}}
 

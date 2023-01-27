@@ -34,6 +34,7 @@ cmp["hrsh7th/nvim-cmp"] = {
         { "f3fora/cmp-spell" },
         { "andersevenrud/cmp-tmux" },
         { "hrsh7th/cmp-omni" },
+        { "rinx/cmp-skkeleton" },
     },
     config = conf.cmp,
 }

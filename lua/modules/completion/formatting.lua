@@ -8,7 +8,9 @@ vim.api.nvim_create_user_command("FormatToggle", function()
     M.toggle_format_on_save()
 end, {})
 
-local block_list = {}
+local block_list = {
+    "tex",
+}
 vim.api.nvim_create_user_command("FormatterToggle", function(opts)
     if block_list[opts.args] == nil then
         vim.notify(

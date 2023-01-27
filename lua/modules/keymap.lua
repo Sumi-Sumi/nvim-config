@@ -151,8 +151,8 @@ local plug_keymap = {
     ["n|<leader>p"] = map_cr("Legendary"):with_silent(),
     ["n|gh"] = map_cr("Lspsaga lsp_finder"):with_silent(),
     -- Plugin skkeleton
-    ["i|<C-k>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
-    ["c|<C-k>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
+    ["i|<C-Space>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
+    ["c|<C-Space>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
 }
 
 bind.nvim_load_mapping(plug_keymap)
