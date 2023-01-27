@@ -126,7 +126,7 @@ configs["marksman"] = {}
 
 -- {{{ LSP: texlab
 configs["texlab"] = {
-    cmd = { "texlab", "-v", "--log-file=/home/sumi/texlab.log" },
+    cmd = { "texlab" },
     capabilities = capabilities,
     settings = {
         texlab = {

@@ -208,6 +208,7 @@ function config.skkeleton()
         end
         return lines
     end
+    local icons = { skkeleton = require("modules.ui.icons").get("skkeleton", true) }
     local dict_path = utils.joinpath(global.home, ".local", "share", "fcitx5", "skk", "dictionary_list")
     local opts = {
         globalDictionaries = lines_from(dict_path),
@@ -216,7 +217,10 @@ function config.skkeleton()
         skkServerReqEnc = "utf-8",
         skkServerResEnc = "utf-8",
         immediatelyCancel = false,
+        usePopup = true,
         useSkkServer = false,
+        markerHenkan = icons.skkeleton.Henkan,
+        markerHenkanSelect = icons.skkeleton.HenkanSelect,
         userJisyo = utils.joinpath(global.state_dir, "skkeleton"),
     }
     vim.fn["skkeleton#config"](opts)
@@ -240,6 +244,17 @@ function config.skkeleton()
     for _, t in ipairs(keymaps) do
         vim.fn["skkeleton#register_keymap"](t[3], t[1], t[2])
     end
+
+    -- ポップアップウィンドウを使用しないと変換結果の挿入位置がおかしくなる
+    vim.api.nvim_command("augroup " .. "skkeleton-disable-post")
+    vim.api.nvim_command("autocmd!")
+    vim.api.nvim_command("autocmd User skkeleton-disable-post lua require('cmp').setup.buffer({ enabled = true })")
+    vim.api.nvim_command("augroup END")
+
+    vim.api.nvim_command("augroup " .. "skkeleton-enable-pre")
+    vim.api.nvim_command("autocmd!")
+    vim.api.nvim_command("autocmd User skkeleton-enable-pre lua require('cmp').setup.buffer({ enabled = false })")
+    vim.api.nvim_command("augroup END")
 end
 -- }}}
 

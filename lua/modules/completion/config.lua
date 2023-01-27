@@ -30,9 +30,13 @@ function config.lspsaga()
     end
 
     set_sidebar_icons()
+    vim.g.enable_autocmp = true
 
     local colors = require("utils.color").get_palette()
     local opts = {
+        enabled = function()
+            return vim.g.enable_autocmp
+        end,
         preview = {
             lines_above = 1,
             lines_below = 12,
@@ -256,6 +260,7 @@ function config.cmp()
                         buffer = " [BUFFER]",
                         latex_symbols = " [LATEX]",
                         copilot = " [COPILOT]",
+                        omni = " [OMNI]",
                     },
                 })(entry, vim_item)
                 local strings = vim.split(kind.kind, "%s", { trimempty = true })
@@ -276,7 +281,6 @@ function config.cmp()
         },
         -- You should specify your *installed* sources.
         sources = {
-            -- { name = "omni" },
             { name = "nvim_lsp" },
             { name = "nvim_lua" },
             { name = "luasnip" },
