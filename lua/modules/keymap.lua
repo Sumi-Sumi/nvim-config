@@ -154,13 +154,13 @@ local plug_keymap = {
     ["i|<C-Space>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
     ["c|<C-Space>"] = map_cmd("<Plug>(skkeleton-toggle)"):with_silent(),
     -- Plugin vim-translator
-    ["n|<leader>tst"] = map_cmd("<Plug>(Translate)"):with_silent(),
-    ["v|<leader>tst"] = map_cmd("<Plug>(TranslateV)"):with_silent(),
-    ["n|<leader>tsw"] = map_cmd("<Plug>(TranslateW)"):with_silent(),
-    ["v|<leader>tsw"] = map_cmd("<Plug>(TranslateWV)"):with_silent(),
-    ["n|<leader>tsr"] = map_cmd("<Plug>(TranslateR)"):with_silent(),
-    ["v|<leader>tsr"] = map_cmd("<Plug>(TranslateRV)"):with_silent(),
-    ["n|<leader>tsx"] = map_cmd("<Plug>(TranslateX)"):with_silent(),
+    ["n|<leader>tst"] = map_cr("Translate"):with_silent(),
+    ["v|<leader>tst"] = map_cr("Translate"):with_silent(),
+    ["n|<leader>tsw"] = map_cr("TranslateW"):with_silent(),
+    ["v|<leader>tsw"] = map_cr("TranslateW"):with_silent(),
+    ["n|<leader>tsr"] = map_cr("TranslateR"):with_silent(),
+    ["v|<leader>tsr"] = map_cr("TranslateR"):with_silent(),
+    ["n|<leader>tsx"] = map_cr("TranslateX"):with_silent(),
 }
 
 bind.nvim_load_mapping(plug_keymap)
