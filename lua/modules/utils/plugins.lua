@@ -91,6 +91,18 @@ utils["kylechui/nvim-surround"] = {
     config = conf.surround,
 }
 
+utils["voldikss/vim-translator"] = {
+    cmd = {
+        "Translate",
+        "TranslateW",
+        "TranslateR",
+        "TranslateX",
+        "TranslateH",
+        "TranslateL",
+    },
+    config = conf.translator,
+}
+
 utils["vim-skk/skkeleton"] = {
     dependencies = {
         { "vim-denops/denops.vim" },

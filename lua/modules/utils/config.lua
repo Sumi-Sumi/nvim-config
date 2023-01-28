@@ -105,78 +105,6 @@ function config.open_browser()
 end
 -- }}}
 
--- {{{ todo-comments
-function config.todo_comments()
-    local icons = {
-        ui = require("modules.ui.icons").get("ui", true),
-        diagnostics = require("modules.ui.icons").get("diagnostics", true),
-    }
-    local opts = {
-        keywords = {
-            FIX = {
-                icon = icons.ui.Bug,
-                color = "error",
-                alt = { "FIXME", "BUG", "FIXIT", "ISSUE" },
-            },
-            TODO = {
-                icon = icons.ui.Check,
-                color = "info",
-            },
-            HACK = {
-                icon = icons.ui.Fire,
-                color = "warning",
-            },
-            WARN = {
-                icon = icons.diagnostics.Warning,
-                color = "warning",
-                alt = { "WARNING", "XXX" },
-            },
-            PERF = {
-                icon = icons.ui.Perf,
-                alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" },
-            },
-            NOTE = {
-                icon = icons.ui.Note,
-                color = "hint",
-                alt = { "INFO" },
-            },
-            TEST = {
-                icon = icons.ui.CodeAction,
-                color = "test",
-                alt = { "TESTING", "PASSED", "FAILED" },
-            },
-        },
-        highlight = {
-            multiline = true, -- enable multine todo comments
-            exclude = {},
-        },
-        colors = {
-            error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
-            warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
-            info = { "DiagnosticInfo", "#2563EB" },
-            hint = { "DiagnosticHint", "#10B981" },
-            default = { "Identifier", "#7C3AED" },
-            test = { "Identifier", "#FF00FF" },
-        },
-        search = {
-            command = "rg",
-            args = {
-                "--color=never",
-                "--no-heading",
-                "--with-filename",
-                "--line-number",
-                "--column",
-            },
-            -- regex that will be used to match keywords.
-            -- don't replace the (KEYWORDS) placeholder
-            pattern = [[\b(KEYWORDS):]], -- ripgrep regex
-            -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
-        },
-    }
-    require("todo-comments").setup(opts)
-end
--- }}}
-
 -- {{{ skkeleton
 function config.skkeleton()
     local global = require("core.global")
@@ -276,6 +204,85 @@ function config.surround()
     }
 
     require("nvim-surround").setup(opts)
+end
+-- }}}
+
+-- {{{ todo-comments
+function config.todo_comments()
+    local icons = {
+        ui = require("modules.ui.icons").get("ui", true),
+        diagnostics = require("modules.ui.icons").get("diagnostics", true),
+    }
+    local opts = {
+        keywords = {
+            FIX = {
+                icon = icons.ui.Bug,
+                color = "error",
+                alt = { "FIXME", "BUG", "FIXIT", "ISSUE" },
+            },
+            TODO = {
+                icon = icons.ui.Check,
+                color = "info",
+            },
+            HACK = {
+                icon = icons.ui.Fire,
+                color = "warning",
+            },
+            WARN = {
+                icon = icons.diagnostics.Warning,
+                color = "warning",
+                alt = { "WARNING", "XXX" },
+            },
+            PERF = {
+                icon = icons.ui.Perf,
+                alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" },
+            },
+            NOTE = {
+                icon = icons.ui.Note,
+                color = "hint",
+                alt = { "INFO" },
+            },
+            TEST = {
+                icon = icons.ui.CodeAction,
+                color = "test",
+                alt = { "TESTING", "PASSED", "FAILED" },
+            },
+        },
+        highlight = {
+            multiline = true, -- enable multine todo comments
+            exclude = {},
+        },
+        colors = {
+            error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+            warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
+            info = { "DiagnosticInfo", "#2563EB" },
+            hint = { "DiagnosticHint", "#10B981" },
+            default = { "Identifier", "#7C3AED" },
+            test = { "Identifier", "#FF00FF" },
+        },
+        search = {
+            command = "rg",
+            args = {
+                "--color=never",
+                "--no-heading",
+                "--with-filename",
+                "--line-number",
+                "--column",
+            },
+            -- regex that will be used to match keywords.
+            -- don't replace the (KEYWORDS) placeholder
+            pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+            -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+        },
+    }
+    require("todo-comments").setup(opts)
+end
+-- }}}
+
+-- {{{ vim-translator
+function config.translator()
+    vim.g.translator_target_lang = "ja"
+    vim.g.translator_default_engines = { "google", "bing", "haici", "youdao" }
 end
 -- }}}
 
