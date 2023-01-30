@@ -1,5 +1,11 @@
 local config = {}
 
+-- {{{ csv.vim
+function config.csv()
+    vim.g.csv_nomap_space = 1
+end
+-- }}}
+
 -- {{{ flutter-tools
 function config.flutter_tools()
     local opts = {
