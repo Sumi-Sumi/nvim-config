@@ -186,6 +186,7 @@ function config.orgmode()
         org_agenda_files = { utils.joinpath(agenda_dir, "**", "*") },
         org_default_notes_file = utils.joinpath(agenda_dir, "notes", "note.org"),
     }
+    require("orgmode").setup_ts_grammar()
     require("orgmode").setup(opt)
 end
 -- }}}
