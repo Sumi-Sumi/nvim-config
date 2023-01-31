@@ -3,6 +3,7 @@ local conf = require("modules.lang.config")
 
 lang["chrisbra/csv.vim"] = {
     ft = "csv",
+    config = conf.csv
 }
 
 lang["akinsho/flutter-tools.nvim"] = {
