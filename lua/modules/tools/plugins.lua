@@ -34,7 +34,7 @@ tools["nvim-neo-tree/neo-tree.nvim"] = {
 
 tools["nvim-orgmode/orgmode"] = {
     event = "VeryLazy",
-    -- config = conf.orgmode,
+    config = conf.orgmode,
 }
 
 -- Codeの部分実行

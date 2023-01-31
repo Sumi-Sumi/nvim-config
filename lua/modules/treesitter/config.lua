@@ -80,6 +80,7 @@ function config.nvim_treesitter()
             "make",
             "markdown",
             "nix",
+            "org",
             "perl",
             "python",
             "rust",
@@ -100,7 +101,7 @@ function config.nvim_treesitter()
             disable = {
                 "vim",
             },
-            additional_vim_regex_highlighting = false,
+            additional_vim_regex_highlighting = { "org" },
         },
         textobject = {
             select = {

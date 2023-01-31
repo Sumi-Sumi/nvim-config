@@ -174,6 +174,22 @@ function config.neo_tree()
 end
 -- }}}
 
+-- {{{ orgmode
+function config.orgmode()
+    local global = require("core.global")
+    local utils = require("utils")
+    local agenda_dir = utils.joinpath(global.home, "workspace", "my-orgs")
+    if vim.fn.isdirectory(global.cache_dir) == 0 then
+        utils.mkdir(utils.joinpath(agenda_dir, "notes"))
+    end
+    local opt = {
+        org_agenda_files = { utils.joinpath(agenda_dir, "**", "*") },
+        org_default_notes_file = utils.joinpath(agenda_dir, "notes", "note.org"),
+    }
+    require("orgmode").setup(opt)
+end
+-- }}}
+
 -- {{{ window-picker
 function config.window_picker()
     require("window-picker").setup()
