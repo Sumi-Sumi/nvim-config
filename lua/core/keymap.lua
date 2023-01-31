@@ -1,13 +1,11 @@
 local bind = require("utils.keybind")
 local map_cr, map_cu, map_cmd = bind.map_cr, bind.map_cu, bind.map_cmd
 
-
 local function map_leader()
     vim.g.mapleader = " "
     vim.keymap.set("n", " ", "")
     vim.keymap.set("x", " ", "")
 end
-
 
 local default_keymap = {
     -- Normal mode
@@ -18,13 +16,10 @@ local default_keymap = {
     ["n|J"] = map_cmd("mzJ`z`"), -- カーソル位置を維持したまま一行にする
     ["n|ts"] = map_cr("setlocal spell! spellang=en_us"),
 
-    -- ["n|<C-n>"] = map_cr("bnext"):with_silent(),
-    -- ["n|<C-p>"] = map_cr("bprevious"):with_silent(),
     ["n|<leader>r"] = map_cr("luafile %"):with_silent(),
     ["n|<Tab>"] = map_cr("tabnext"):with_silent(),
     ["n|<S-Tab>"] = map_cr("tabprevious"):with_silent(),
     ["n|<C-Tab>"] = map_cr("tabnew"):with_silent(),
-
 
     ["n|<C-s>"] = map_cr("write"),
     ["n|<C-q>"] = map_cmd(":wq<CR>"),
@@ -70,7 +65,6 @@ local default_keymap = {
     -- Command line
     ["c|<C-t>"] = map_cmd([[<C-R>=expand("%:p:h") . "/" <CR>]]),
 }
-
 
 map_leader()
 bind.nvim_load_mapping(default_keymap)

@@ -33,8 +33,10 @@ local plug_keymap = {
     ["n|gb"] = map_cr("BufferLinePick"):with_silent(),
     ["n|<C-n>"] = map_cr("BufferLineCycleNext"):with_silent(),
     ["n|<C-p>"] = map_cr("BufferLineCyclePrev"):with_silent(),
-    ["n|<A-S-n>"] = map_cr("BufferLineMoveNext"):with_silent(),
-    ["n|<A-S-p>"] = map_cr("BufferLineMovePrev"):with_silent(),
+    -- ["n|<C-l>"] = map_cr("BufferLineCycleNext"):with_silent(),
+    -- ["n|<C-h>"] = map_cr("BufferLineCyclePrev"):with_silent(),
+    ["n|<A-S-l>"] = map_cr("BufferLineMoveNext"):with_silent(),
+    ["n|<A-S-h>"] = map_cr("BufferLineMovePrev"):with_silent(),
     ["n|<leader>be"] = map_cr("BufferLineSortByExtension"),
     ["n|<leader>bd"] = map_cr("BufferLineSortByDirectory"),
     ["n|<C-1>"] = map_cr("BufferLineGoToBuffer 1"):with_silent(),
@@ -77,8 +79,8 @@ local plug_keymap = {
     ["n|]t"] = map_cr("lua require('todo-comments').jump_next()"),
     ["n|[t"] = map_cr("lua require('todo-comments').jump_prev()"),
     -- vim-easy-align
-    ["n|ga"] = map_cmd("<Plug>(EasyAlign)"):with_silent(),
-    ["x|ga"] = map_cmd("<Plug>(EasyAlign)"):with_silent(),
+    ["n|ga"] = map_cr("EasyAlign"):with_silent(),
+    ["x|ga"] = map_cr("EasyAlign"):with_silent(),
     -- vim-fugitive
     ["n|<leader>gg"] = map_cr("Git"),
     ["n|<leader>ga"] = map_cr("Gwrite"),
