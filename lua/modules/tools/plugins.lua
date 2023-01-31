@@ -32,6 +32,11 @@ tools["nvim-neo-tree/neo-tree.nvim"] = {
     config = conf.neo_tree,
 }
 
+tools["nvim-orgmode/orgmode"] = {
+    event = "VeryLazy",
+    -- config = conf.orgmode,
+}
+
 -- Codeの部分実行
 tools["michaelb/sniprun"] = {
     build = "bash ./install.sh",
