@@ -51,6 +51,7 @@ in
 
         # LSP
         clang-tools # Not run binary pkg installed by mason
+        neovim-remote
       ];
 
       extraPython3Packages = ps: with ps; [
