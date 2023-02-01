@@ -1,6 +1,5 @@
 local config = {}
 
--- {{{ better-escape
 function config.better_escape()
     local opts = {
         mapping = { "jk", "jj" },
@@ -10,9 +9,7 @@ function config.better_escape()
 
     require("better_escape").setup(opts)
 end
--- }}}
 
--- {{{ better-whitespace
 function config.better_whitespace()
     vim.g.better_whitespace_enabled = 0
     vim.g.better_whitespace_on_save = 0
@@ -20,9 +17,7 @@ function config.better_whitespace()
     vim.g.strip_whitespace_on_save = 1
     vim.g.strip_whitespace_confirm = 0
 end
--- }}}
 
--- {{{ clever-f
 function config.clever_f()
     vim.api.nvim_set_hl(0, "CleverChar", {
         underline = true,
@@ -37,15 +32,11 @@ function config.clever_f()
     vim.g.clever_f_mark_direct = true
     vim.g.clever_f_timeout_ms = 1500
 end
--- }}}
 
--- {{{ hop
 function config.hop()
     require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
 end
--- }}}
 
--- {{{ neoscroll
 function config.neoscroll()
     local opts = {
         mappings = {
@@ -64,9 +55,7 @@ function config.neoscroll()
     }
     require("neoscroll").setup(opts)
 end
--- }}}
 
--- {{{ nvim-comment
 function config.nvim_comment()
     local opts = {
         hook = function()
@@ -75,9 +64,7 @@ function config.nvim_comment()
     }
     require("nvim_comment").setup(opts)
 end
--- }}}
 
--- {{{ open-browser
 function config.open_browser()
     vim.g.openbrowser_search_engines = {
         ["duckduckgo"] = "https://duckduckgo.com/?q={query}",
@@ -103,9 +90,7 @@ function config.open_browser()
     vim.g.openbrowser_default_search = "startpage"
     vim.g.openbrowser_use_vimproc = 1
 end
--- }}}
 
--- {{{ skkeleton
 function config.skkeleton()
     local global = require("core.global")
     local utils = require("utils")
@@ -184,9 +169,7 @@ function config.skkeleton()
     vim.api.nvim_command("autocmd User skkeleton-enable-pre lua require('cmp').setup.buffer({ enabled = false })")
     vim.api.nvim_command("augroup END")
 end
--- }}}
 
--- {{{ surround
 function config.surround()
     local opts = {
         keymaps = {
@@ -205,9 +188,7 @@ function config.surround()
 
     require("nvim-surround").setup(opts)
 end
--- }}}
 
--- {{{ todo-comments
 function config.todo_comments()
     local icons = {
         ui = require("modules.ui.icons").get("ui", true),
@@ -277,13 +258,10 @@ function config.todo_comments()
     }
     require("todo-comments").setup(opts)
 end
--- }}}
 
--- {{{ vim-translator
 function config.translator()
     vim.g.translator_target_lang = "ja"
     vim.g.translator_default_engines = { "google", "bing", "haici", "youdao" }
 end
--- }}}
 
 return config

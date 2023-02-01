@@ -118,3 +118,14 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
     end,
 })
+
+vim.api.nvim_create_autocmd("BufReadPre", {
+    pattern = {
+        "config.lua",
+    },
+    callback = function()
+        vim.opt_local.foldmethod = "expr"
+        vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
+        vim.opt_local.foldnestmax = 1
+    end,
+})

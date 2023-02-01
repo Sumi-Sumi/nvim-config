@@ -1,12 +1,9 @@
 local config = {}
 
--- {{{ nvim-lsp
 function config.nvim_lsp()
     require("modules.completion.lsp")
 end
--- }}}
 
--- {{{ lspsaga
 function config.lspsaga()
     local icons = {
         diagnostics = require("modules.ui.icons").get("diagnostics", true),
@@ -181,9 +178,7 @@ function config.lspsaga()
     }
     require("lspsaga").setup(opts)
 end
--- }}}
 
--- {{{ nvim-cmp
 function config.cmp()
     local icons = {
         kind = require("modules.ui.icons").get("kind", false),
@@ -298,9 +293,7 @@ function config.cmp()
 
     cmp.setup(opts)
 end
--- }}}
 
--- {{{ luasnip
 function config.luasnip()
     local vim_path = require("core.global").vim_path
     local utils = require("utils")
@@ -318,16 +311,7 @@ function config.luasnip()
     require("luasnip.loaders.from_vscode").lazy_load()
     require("luasnip.loaders.from_snipmate").lazy_load()
 end
--- }}}
 
--- {{{ tabnine
--- function config.tabnine()
---  local tabnine = require("cmp_tabnine.config")
---  tabnine:setup({ max_line = 1000, max_num_results = 20, sort = true })
--- end
--- }}}
-
--- {{{ autopairs
 function config.autopairs()
     require("nvim-autopairs").setup()
     local npairs = require("nvim-autopairs")
@@ -381,9 +365,7 @@ function config.autopairs()
         })
     )
 end
--- }}}
 
--- {{{ mason-install
 function config.mason_install()
     require("mason-tool-installer").setup({
 
@@ -417,9 +399,7 @@ function config.mason_install()
         run_on_start = true,
     })
 end
--- }}}
 
--- {{{ copilot
 function config.copilot()
     vim.defer_fn(function()
         require("copilot").setup({
@@ -429,6 +409,5 @@ function config.copilot()
         })
     end, 100)
 end
--- }}}
 
 return config

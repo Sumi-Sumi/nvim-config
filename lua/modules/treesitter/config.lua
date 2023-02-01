@@ -1,7 +1,6 @@
 local config = {}
 local use_ssh = require("core.settings").use_ssh
 
--- {{{ vim-illuminate
 function config.vim_illuminate()
     local opts = {
         providers = {
@@ -28,9 +27,7 @@ function config.vim_illuminate()
 
     require("illuminate").configure(opts)
 end
--- }}}
 
--- {{{ neodim
 function config.neodim()
     local normal_background = vim.api.nvim_get_hl_by_name("Normal", true).background
     local opts = {
@@ -49,15 +46,11 @@ function config.neodim()
 
     require("neodim").setup(opts)
 end
--- }}}
 
--- {{{ nvim-colorizer
 function config.nvim_colorizer()
     require("colorizer").setup()
 end
--- }}}
 
--- {{{ nvim-treesitter
 function config.nvim_treesitter()
     local km = { textobject = require("modules.lazy_keymap").textobject() }
     local opts = {
@@ -136,6 +129,5 @@ function config.nvim_treesitter()
         end
     end
 end
--- }}}
 
 return config

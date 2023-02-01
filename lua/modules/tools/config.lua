@@ -1,6 +1,5 @@
 local config = {}
 
--- {{{ dressing
 function config.dressing()
     local opts = {
         input = {
@@ -15,9 +14,7 @@ function config.dressing()
 
     require("dressing").setup(opts)
 end
--- }}}
 
--- {{{ legendary
 function config.legendary()
     local opts = {
         which_key = {
@@ -52,9 +49,7 @@ function config.legendary()
     require("legendary").setup(opts)
     require("which-key").register(km.which_key)
 end
--- }}}
 
--- {{{ neotree
 function config.neo_tree()
     local icons = {
         ui = require("modules.ui.icons").get("ui"),
@@ -172,9 +167,7 @@ function config.neo_tree()
     }
     require("neo-tree").setup(opts)
 end
--- }}}
 
--- {{{ orgmode
 function config.orgmode()
     local global = require("core.global")
     local utils = require("utils")
@@ -189,15 +182,11 @@ function config.orgmode()
     require("orgmode").setup_ts_grammar()
     require("orgmode").setup(opt)
 end
--- }}}
 
--- {{{ window-picker
 function config.window_picker()
     require("window-picker").setup()
 end
--- }}}
 
--- {{{ sniprun
 function config.sniprun()
     local opts = {
         selected_interpreters = {}, -- " use those instead of the default for the current filetype
@@ -222,13 +211,11 @@ function config.sniprun()
     }
     require("sniprun").setup(opts)
 end
--- }}}
 
--- {{{ vimproc
-function config.vimproc() end
--- }}}
+function config.vimproc()
+    --config
+end
 
--- {{{ trouble
 function config.trouble()
     local icons = {
         ui = require("modules.ui.icons").get("ui"),
@@ -263,9 +250,7 @@ function config.trouble()
 
     require("trouble").setup(opts)
 end
--- }}}
 
--- {{{ undotree
 function config.undotree()
     local utils = require("utils")
     local path = utils.joinpath(require("core.global").cache_dir, "undotree")
@@ -275,9 +260,7 @@ function config.undotree()
     vim.g.undofile = path
     vim.g.undotree_WindowLayout = 3 -- LeftSideWindow
 end
--- }}}
 
--- {{{ which-key
 function config.which_key()
     local icons = {
         ui = require("modules.ui.icons").get("ui"),
@@ -319,9 +302,7 @@ function config.which_key()
 
     require("which-key").setup(opts)
 end
--- }}}
 
--- {{{ wilder
 function config.wilder()
     local wilder = require("wilder")
     local icons = { ui = require("modules.ui.icons").get("ui") }
@@ -374,9 +355,7 @@ function config.wilder()
         })
     )
 end
--- }}}
 
--- {{{ toggleterm
 function config.toggleterm()
     local opts = {
         size = function(term)
@@ -404,9 +383,7 @@ function config.toggleterm()
 
     require("toggleterm").setup(opts)
 end
--- }}}
 
--- {{{ telescope
 function config.telescope()
     local icons = {
         ui = require("modules.ui.icons").get("ui", true),
@@ -495,12 +472,9 @@ function config.telescope()
     require("telescope").load_extension("bookmarks")
     require("telescope").load_extension("http")
 end
--- }}}
 
--- {{{ telescope-tab
 function config.telescope_tabs()
     require("telescope-tabs").setup()
 end
---}}}
 
 return config
