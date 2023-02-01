@@ -1,5 +1,5 @@
 return {
     rootMarkers = { "main.tex" },
-    formatCommand = "latexindent -g /dev/null",
+    formatCommand = "latexindent -l -g /dev/null",
     formatStdin = true,
 }

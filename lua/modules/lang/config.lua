@@ -225,10 +225,14 @@ function config.vimtex()
     vim.g.vimtex_syntax_enabled = 0
     vim.g.vimtex_complete_enabled = 0
     vim.g.vimtex_format_enabled = 0
+
     vim.g.vimtex_fold_enabled = 1
     vim.g.vimtex_fold_types = {
+        items = {
+            enabled = 0,
+        },
         envs = {
-            blacklist = { "figure", "table", "itemize", "tabular", "minipage", "tikzpicture" },
+            blacklist = { "figure", "itemize", "tabular", "tikzpicture" },
         },
     }
 end
