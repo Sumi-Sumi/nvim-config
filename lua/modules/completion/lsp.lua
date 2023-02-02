@@ -81,7 +81,7 @@ configs["texlab"] = {
     settings = {
         texlab = {
             auxDirectory = "./build",
-            bibtexFormatter = "texlab",
+            bibtexFormatter = "none",
             build = {
                 args = { "%f" },
                 executable = "latexmk",
@@ -90,7 +90,7 @@ configs["texlab"] = {
             },
             chktex = {
                 onEdit = false,
-                onOpenAndSave = false,
+                onOpenAndSave = true,
             },
             diagnosticsDelay = 200,
             formatterLineLength = 120,
@@ -101,7 +101,7 @@ configs["texlab"] = {
             -- The latexindent from efm works perfectly.
             -- Since texlab formatter is not implemented yet, specifying this will disable the formatter.
             -- If texlab formatter is implemented, you cannot disable formatter in this way
-            latexFormatter = "texlab",
+            latexFormatter = "none",
         },
     },
 }
