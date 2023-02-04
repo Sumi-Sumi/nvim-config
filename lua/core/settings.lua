@@ -2,7 +2,7 @@ local settings = {}
 local utils = require("utils")
 local global = require("core.global")
 
-settings["use_ssh"] = true
+settings["use_ssh"] = false
 settings["lazy_path"] = utils.joinpath(global.data_dir, "lazy", "lazy.nvim")
 settings["format_on_save"] = true
 settings["format_disabled_dirs"] = {
