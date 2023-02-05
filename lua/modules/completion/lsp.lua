@@ -292,7 +292,7 @@ if is_linux and vim.api.nvim_exec("!cat /etc/os-release | grep '^NAME'", true):f
                     bin_abs_path = pkg:get_install_path() .. "/extension/server/bin/lua-language-server"
                     os.execute(("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path))
                 elseif pkg.name == "clangd" then
-                    bin_abs_path = pkg:get_install_path() .. "/clangd"
+                    bin_abs_path = pkg:get_install_path() .. "/clangd/bin/clangd"
                     os.execute(("patchelf --set-interpreter %s %s"):format(interpreter, bin_abs_path))
                 elseif pkg.name == "marksman" then
                     bin_abs_path = pkg:get_install_path() .. "/marksman"
