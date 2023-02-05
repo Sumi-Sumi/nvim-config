@@ -64,8 +64,6 @@ configs["rnix"] = {}
 
 configs["marksman"] = {}
 
-configs["powershell_es"] = {}
-
 configs["texlab"] = { -- {{{
     cmd = { "texlab" },
     capabilities = capabilities,
