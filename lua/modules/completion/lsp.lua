@@ -54,28 +54,19 @@ end
 
 -- LSP configs
 -- Override server settings here
--- {{{ LSP: bashls
 configs["bashls"] = {}
--- }}}
 
--- {{{ LSP: efm
 configs["efm"] = {}
--- }}}
 
--- {{{ LSP: pyright
 configs["pyright"] = {}
--- }}}
 
--- {{{ LSP: rnix
 configs["rnix"] = {}
--- }}}
 
--- {{{ LSP: marksman
 configs["marksman"] = {}
--- }}}
 
--- {{{ LSP: texlab
-configs["texlab"] = {
+configs["powershell_es"] = {}
+
+configs["texlab"] = { -- {{{
     cmd = { "texlab" },
     capabilities = capabilities,
     settings = {
@@ -104,11 +95,9 @@ configs["texlab"] = {
             latexFormatter = "none",
         },
     },
-}
--- }}}
+} -- }}}
 
--- {{{ LSP: gopls
-configs["gopls"] = {
+configs["gopls"] = { -- {{{
     on_attach = custom_attach,
     flags = { debounce_text_changes = 500 },
     capabilities = capabilities,
@@ -124,11 +113,9 @@ configs["gopls"] = {
             },
         },
     },
-}
--- }}}
+} -- }}}
 
--- {{{ LSP: sumneko_lua
-configs["sumneko_lua"] = {
+configs["sumneko_lua"] = { -- {{{
     capabilities = capabilities,
     on_attach = custom_attach,
     settings = {
@@ -147,11 +134,9 @@ configs["sumneko_lua"] = {
             semantic = { enable = false },
         },
     },
-}
--- }}}
+} -- }}}
 
--- {{{ LSP: clangd
-configs["clangd"] = {
+configs["clangd"] = { -- {{{
     capabilities = vim.tbl_deep_extend("keep", { offsetEncoding = { "utf-16", "utf-8" } }, capabilities),
     single_file_support = true,
     on_attach = custom_attach,
@@ -188,11 +173,9 @@ configs["clangd"] = {
             description = "Open source/header in a new split",
         },
     },
-}
--- }}}
+} -- }}}
 
--- {{{ LSP: jsonls
-configs["jsonls"] = {
+configs["jsonls"] = { -- {{{
     flags = { debounce_text_changes = 500 },
     capabilities = capabilities,
     on_attach = custom_attach,
@@ -247,11 +230,9 @@ configs["jsonls"] = {
             },
         },
     },
-}
--- }}}
+} -- }}}
 
--- {{{ LSP: html
-configs["html"] = {
+configs["html"] = { -- {{{
     filetypes = { "html" },
     init_options = {
         configurationSection = { "html", "css", "javascript" },
@@ -262,10 +243,9 @@ configs["html"] = {
     flags = { debounce_text_changes = 500 },
     capabilities = capabilities,
     on_attach = custom_attach,
-}
--- }}}
+} -- }}}
 
---{{{ hook after mason-install
+--{{{ patching hook after mason-install
 -- Make mason packages work with nixos
 -- We're using patchelf to mathe that work
 -- Thanks to: https://github.com/williamboman/mason.nvim/issues/428#issuecomment-1357192515
