@@ -136,7 +136,9 @@ function config.neo_tree()
                     "*.meta",
                     --"*/src/*/tsconfig.json",
                 },
-                always_show = {},
+                always_show = {
+                    "packages/*",
+                },
                 never_show = {
                     ".DS_Store",
                     "__pycache__",
