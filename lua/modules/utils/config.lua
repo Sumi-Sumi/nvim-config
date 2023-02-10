@@ -135,6 +135,7 @@ function config.skkeleton()
         markerHenkan = icons.skkeleton.Henkan,
         markerHenkanSelect = icons.skkeleton.HenkanSelect,
         userJisyo = utils.joinpath(global.state_dir, "skkeleton"),
+        eggLikeNewLine = true,
     }
     vim.fn["skkeleton#config"](opts)
     local keymaps = {
@@ -152,10 +153,16 @@ function config.skkeleton()
         { "<C-x>", "purgeCandidate", "input" },
         { "L", "hankatakana", "input" },
     }
+    local kanatable = {
+        { "z,j", { "‥" } },
+        { "z\\<Space>", { "\\u3000" } },
+    }
     -- vim.fn.add(vim.fn["skkeleton#get_default_mapped_keys"](), mapkeys)
-
     for _, t in ipairs(keymaps) do
         vim.fn["skkeleton#register_keymap"](t[3], t[1], t[2])
+    end
+    for _, t in ipairs(kanatable) do
+        vim.fn["skkeleton#register_kanatable"](t[2], t[1])
     end
 
     -- ポップアップウィンドウを使用しないと変換結果の挿入位置がおかしくなる
