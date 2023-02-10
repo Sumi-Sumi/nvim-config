@@ -92,6 +92,7 @@ function config.open_browser()
 end
 
 function config.skkeleton()
+    -- ポップアップウィンドウを使用しないと変換結果の挿入位置がおかしくなる
     local global = require("core.global")
     local utils = require("utils")
     local fcitx_config_path = utils.joinpath(global.home, ".local", "share", "fcitx5")
@@ -154,14 +155,13 @@ function config.skkeleton()
         { "L", "hankatakana", "input" },
     }
     local kanatable = {}
-    kanatable["z\\<Space>"] = { "\\u3000" }
-    kanatable[""] = "escape"
-    -- ポップアップウィンドウを使用しないと変換結果の挿入位置がおかしくなる
-    vim.api.nvim_command("augroup " .. "skkeleton-disable-post")
-    vim.api.nvim_command("autocmd!")
-    vim.api.nvim_command("autocmd User skkeleton-disable-post call s:skkeleton_init()")
-    vim.api.nvim_command("augroup END")
-
+    kanatable["jj"] = "escape"
+    kanatable["z "] = { "　" }
+    kanatable["z."] = { "．" }
+    kanatable["z,"] = { "，" }
+    kanatable["z("] = { "（" }
+    kanatable["z)"] = { "）" }
+    kanatable["z!"] = { "（" }
     vim.api.nvim_command("augroup " .. "skkeleton-disable-post")
     vim.api.nvim_command("autocmd!")
     vim.api.nvim_command("autocmd User skkeleton-disable-post lua require('cmp').setup.buffer({ enabled = true })")
@@ -177,6 +177,11 @@ function config.skkeleton()
         vim.fn["skkeleton#register_keymap"](t[3], t[1], t[2])
     end
     vim.fn["skkeleton#register_kanatable"]("rom", kanatable)
+
+    -- vim.api.nvim_command("augroup " .. "skkeleton-initialize-pre")
+    -- vim.api.nvim_command("autocmd!")
+    -- vim.api.nvim_command("autocmd User skkeleton-initialize-pre call s:skkeleton_init()")
+    -- vim.api.nvim_command("augroup END")
 end
 
 function config.surround()
