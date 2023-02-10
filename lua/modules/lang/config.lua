@@ -226,6 +226,9 @@ function config.vimtex()
     vim.g.vimtex_syntax_enabled = 0
     vim.g.vimtex_complete_enabled = 0
     vim.g.vimtex_format_enabled = 0
+    vim.g.vimtex_format_enabled = 0
+    vim.g.vimtex_lint_chktex_parameters = "-n"
+    vim.g.vimtex_quickfix_open_on_warning = 0
 
     vim.g.vimtex_fold_enabled = 1
     vim.g.vimtex_fold_types = {
@@ -233,7 +236,7 @@ function config.vimtex()
             enabled = 0,
         },
         envs = {
-            blacklist = { "figure", "itemize", "tabular", "tikzpicture" },
+            blacklist = { "figure", "itemize", "tabular", "tikzpicture", "subsection", "subsubsection" },
         },
     }
 end

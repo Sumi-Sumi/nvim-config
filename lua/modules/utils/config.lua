@@ -127,7 +127,7 @@ function config.skkeleton()
     local opts = {
         globalDictionaries = lines_from(dict_path),
         globalJisyoEncoding = "utf-8",
-        showCandidatesCount = 0,
+        showCandidatesCount = 3,
         skkServerReqEnc = "utf-8",
         skkServerResEnc = "utf-8",
         immediatelyCancel = false,
@@ -146,8 +146,7 @@ function config.skkeleton()
         { "<C-q>", "", "henkan" },
         { "<C-Space>", "", "input" },
         { "<C-Space>", "", "henkan" },
-        { "<C-j>", "cancel", "input" },
-        { "<C-j>", "kakutei", "henkan" },
+        { "<C-j>", "kakutei", "input" },
         { "q", "katakana", "input" },
         { "<C-q>", "hankatakana", "input" },
         { "<C-x>", "cancel", "henkan" },
@@ -162,26 +161,53 @@ function config.skkeleton()
     kanatable["z("] = { "（" }
     kanatable["z)"] = { "）" }
     kanatable["z!"] = { "（" }
-    vim.api.nvim_command("augroup " .. "skkeleton-disable-post")
-    vim.api.nvim_command("autocmd!")
-    vim.api.nvim_command("autocmd User skkeleton-disable-post lua require('cmp').setup.buffer({ enabled = true })")
-    vim.api.nvim_command("augroup END")
+    kanatable["z1"] = { "１" }
+    kanatable["z2"] = { "２" }
+    kanatable["z3"] = { "３" }
+    kanatable["z4"] = { "４" }
+    kanatable["z5"] = { "５" }
+    kanatable["z6"] = { "６" }
+    kanatable["z7"] = { "７" }
+    kanatable["z8"] = { "８" }
+    kanatable["z9"] = { "９" }
+    kanatable["z0"] = { "０" }
 
-    vim.api.nvim_command("augroup " .. "skkeleton-enable-pre")
-    vim.api.nvim_command("autocmd!")
-    vim.api.nvim_command("autocmd User skkeleton-enable-pre lua require('cmp').setup.buffer({ enabled = false })")
-    vim.api.nvim_command("augroup END")
-
-    -- vim.fn.add(vim.fn["skkeleton#get_default_mapped_keys"](), mapkeys)
     for _, t in ipairs(keymaps) do
         vim.fn["skkeleton#register_keymap"](t[3], t[1], t[2])
     end
     vim.fn["skkeleton#register_kanatable"]("rom", kanatable)
 
-    -- vim.api.nvim_command("augroup " .. "skkeleton-initialize-pre")
-    -- vim.api.nvim_command("autocmd!")
-    -- vim.api.nvim_command("autocmd User skkeleton-initialize-pre call s:skkeleton_init()")
-    -- vim.api.nvim_command("augroup END")
+    vim.api.nvim_create_autocmd("User", {
+        pattern = "skkeleton-disable-post",
+        callback = function()
+            require("cmp").setup.buffer({ enabled = true })
+        end,
+    })
+    vim.api.nvim_create_autocmd("User", {
+        pattern = "skkeleton-enable-post",
+        callback = function()
+            require("cmp").setup.buffer({ enabled = false })
+        end,
+    })
+    -- vim.api.nvim_create_autocmd("User", {
+    --     pattern = "skkeleton-mode-changed",
+    --     callback = function()
+    --         require("cmp").setup.buffer({ enabled = false })
+    --     end,
+    -- })
+    vim.api.nvim_create_autocmd("BufReadPost", {
+        pattern = "*.tex",
+        callback = function()
+            require("cmp").setup.buffer({ enabled = false })
+            local science_kanatable = {}
+            science_kanatable["."] = { "．" }
+            science_kanatable[","] = { "，" }
+            science_kanatable["("] = { "（" }
+            science_kanatable[")"] = { "）" }
+            science_kanatable["~"] = { "～" }
+            vim.fn["skkeleton#register_kanatable"]("rom", science_kanatable)
+        end,
+    })
 end
 
 function config.surround()
