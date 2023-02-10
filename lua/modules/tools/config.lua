@@ -427,6 +427,11 @@ function config.telescope()
                     preview_width = 0.5,
                 },
             },
+            mappings = {
+                n = {
+                    ["q"] = "close",
+                },
+            },
         },
         extensions = {
             fzf = {
