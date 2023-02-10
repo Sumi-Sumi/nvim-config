@@ -155,6 +155,7 @@ function config.skkeleton()
     }
     local kanatable = {}
     kanatable["z\\<Space>"] = { "\\u3000" }
+    kanatable[""] = "escape"
     -- ポップアップウィンドウを使用しないと変換結果の挿入位置がおかしくなる
     vim.api.nvim_command("augroup " .. "skkeleton-disable-post")
     vim.api.nvim_command("autocmd!")
