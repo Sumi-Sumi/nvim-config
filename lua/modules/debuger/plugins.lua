@@ -1,5 +1,5 @@
 local debug = {}
-local conf = require("modules.debug.config")
+local conf = require("modules.debuger.config")
 
 debug["mfussenegger/nvim-dap"] = {
     cmd = {
